@@ -1,4 +1,5 @@
 .DS_Store
 node_modules/
+script/key.js
 dist/*
 npm-debug.log
