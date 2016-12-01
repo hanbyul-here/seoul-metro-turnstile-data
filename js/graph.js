@@ -163,7 +163,7 @@ d3.json('./data/30min-from-center/total-based-on-date.json', function(error, dat
     .html('<i style=background:#868e96>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> 하차 <br>'+
             '<i style=background:#dee2e6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> 승차')
 
-
+  console.log(subData);
   // Draw sub graphs
   subData.forEach(function(d) {
     drawSubGraph(d.station_name, d.line_num, d.turnstile);
@@ -184,105 +184,106 @@ var drawSubGraph = function(station_name, station_line, data) {
                 .attr('class','col-md-12')
                 .append('h2')
                 .html(station_line+'호선')
-  } else {
-    var subDiv = d3.select('#line'+station_line)
-                    .append('div')
-                .attr('class', 'sub-graph col-md-4 col-xs-12');
-
-    var subDivWidth = document.querySelector('.sub-graph').clientWidth*0.9;
-    var subHeight = 100;
-
-
-    subDiv.append('h4')
-          .text(station_name);
-
-    var subSvg = subDiv
-                  .append('svg')
-                  .attr('width', subDivWidth + margin.left +margin.right)
-                  .attr('height', subHeight + margin.top + margin.bottom)
-                  .append('g')
-                  .attr('transform',
-                        'translate(' + margin.left + ',' + margin.top + ')');
-
-    var subX = d3.scaleTime().range([0, subDivWidth- margin.left]);
-    var subY = d3.scaleLinear().range([subHeight, 0]);
-
-
-    // define the line
-    var subValueline = d3.line()
-        .x(function(d) { return subX(d.date); })
-        .y(function(d) { return subY(d.exits); });
-
-    var subEntryValueline = d3.line()
-        .x(function(d) { return subX(d.date); })
-        .y(function(d) { return subY(d.entries); });
-
-
-    var subMin = Math.min(d3.min(data, function(d) { return d.exits; }), d3.min(data, function(d) { return d.entries; }));
-    var subMax = Math.max(d3.max(data, function(d) { return d.exits; }), d3.max(data, function(d) { return d.entries; }));
-
-    var middle = (subMin + subMax)/2;
-
-    subX.domain(d3.extent(data, function(d) { return d.date; }));
-    subY.domain([subMin*0.95, subMax]);
-
-
-    // Add the entry valueline path.
-    subSvg.append('path')
-        .data([data])
-        .attr('class', 'line'+station_line+ ' entry')
-        .attr('d', subEntryValueline);
-
-
-    // Add the valueline path.
-    subSvg.append('path')
-        .data([data])
-        .attr('class', 'line'+station_line)
-        .attr('d', subValueline);
-
-
-    subSvg.append('g')
-        .attr('transform', 'translate(0,' + subHeight + ')')
-        .call(d3.axisBottom(subX).tickValues(dates).tickFormat(formatTime));
-
-    subSvg.append('g')
-        .call(d3.axisLeft(subY).tickValues([subMin, middle, subMax]));
-
-    // Add Scatter plot points and tooltip
-    subSvg.selectAll('dot')
-        .data(data)
-        .enter().append('svg:image')
-        .attr('width', function(d, i) {
-          return (i < 2)? 6:16})
-        .attr('height', function(d, i) {
-          return (i < 2)? 6:16})
-        .attr('xlink:href', function(d, i) {
-          return (i < 2)? './assets/dot.png':'./assets/candle.png'})
-        .attr('x', function(d, i) {
-          return (i < 2)? subX(d.date)-3:subX(d.date)-8})
-        .attr('y', function(d,i) {
-          return (i < 2)? subY(d.exits)-3:subY(d.exits)-12})
-      .on('click',function(d) {
-        div.transition()
-            .duration(200)
-            .style('opacity', .9);
-        div .html(formatTime(d.date) + '<br/>'  + d3.format(',')(d.exits))
-            .style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 28) + 'px');
-      })
-      .on('mouseover', function(d) {
-        div.transition()
-            .duration(200)
-            .style('opacity', .9);
-        div .html(formatTime(d.date) + '<br/>'  + d3.format(',')(d.exits))
-            .style('left', (d3.event.pageX) + 'px')
-            .style('top', (d3.event.pageY - 28) + 'px');
-      })
-      .on('mouseout', function(d) {
-          div.transition()
-              .duration(500)
-              .style('opacity', 0);
-      });
   }
+
+  var subDiv = d3.select('#line'+station_line)
+                  .append('div')
+              .attr('class', 'sub-graph col-md-4 col-xs-12');
+
+  var subDivWidth = document.querySelector('.sub-graph').clientWidth*0.9;
+  var subHeight = 100;
+
+
+  subDiv.append('h4')
+        .text(station_name);
+
+  var subSvg = subDiv
+                .append('svg')
+                .attr('width', subDivWidth + margin.left +margin.right)
+                .attr('height', subHeight + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform',
+                      'translate(' + margin.left + ',' + margin.top + ')');
+
+  var subX = d3.scaleTime().range([0, subDivWidth- margin.left]);
+  var subY = d3.scaleLinear().range([subHeight, 0]);
+
+
+  // define the line
+  var subValueline = d3.line()
+      .x(function(d) { return subX(d.date); })
+      .y(function(d) { return subY(d.exits); });
+
+  var subEntryValueline = d3.line()
+      .x(function(d) { return subX(d.date); })
+      .y(function(d) { return subY(d.entries); });
+
+
+  var subMin = Math.min(d3.min(data, function(d) { return d.exits; }), d3.min(data, function(d) { return d.entries; }));
+  var subMax = Math.max(d3.max(data, function(d) { return d.exits; }), d3.max(data, function(d) { return d.entries; }));
+
+  var middle = (subMin + subMax)/2;
+
+  subX.domain(d3.extent(data, function(d) { return d.date; }));
+  subY.domain([subMin*0.95, subMax]);
+
+
+  // Add the entry valueline path.
+  subSvg.append('path')
+      .data([data])
+      .attr('class', 'line'+station_line+ ' entry')
+      .attr('d', subEntryValueline);
+
+
+  // Add the valueline path.
+  subSvg.append('path')
+      .data([data])
+      .attr('class', 'line'+station_line)
+      .attr('d', subValueline);
+
+
+  subSvg.append('g')
+      .attr('transform', 'translate(0,' + subHeight + ')')
+      .call(d3.axisBottom(subX).tickValues(dates).tickFormat(formatTime));
+
+  subSvg.append('g')
+      .call(d3.axisLeft(subY).tickValues([subMin, middle, subMax]));
+
+  // Add Scatter plot points and tooltip
+  subSvg.selectAll('dot')
+      .data(data)
+      .enter().append('svg:image')
+      .attr('width', function(d, i) {
+        return (i < 2)? 6:16})
+      .attr('height', function(d, i) {
+        return (i < 2)? 6:16})
+      .attr('xlink:href', function(d, i) {
+        return (i < 2)? './assets/dot.png':'./assets/candle.png'})
+      .attr('x', function(d, i) {
+        return (i < 2)? subX(d.date)-3:subX(d.date)-8})
+      .attr('y', function(d,i) {
+        return (i < 2)? subY(d.exits)-3:subY(d.exits)-12})
+    .on('click',function(d) {
+      div.transition()
+          .duration(200)
+          .style('opacity', .9);
+      div .html(formatTime(d.date) + '<br/>'  + d3.format(',')(d.exits))
+          .style('left', (d3.event.pageX) + 'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+    })
+    .on('mouseover', function(d) {
+      div.transition()
+          .duration(200)
+          .style('opacity', .9);
+      div .html(formatTime(d.date) + '<br/>'  + d3.format(',')(d.exits))
+          .style('left', (d3.event.pageX) + 'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+    })
+    .on('mouseout', function(d) {
+        div.transition()
+            .duration(500)
+            .style('opacity', 0);
+    });
+
 
 }
