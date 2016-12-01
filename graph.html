@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>서울시 지하철역별 이용객 데이터</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./assets/bootstrap.min.css">
+  <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
+  <style> /* set the CSS */
+    body {
+      position: relative;
+    }
+    #graph-30min {
+      margin-top: 30px;
+      position: relative;
+    }
+    .legend {
+      position: absolute;
+      right: 30px;
+      bottom: 80px;
+    }
+    .line {
+      fill: none;
+      stroke: #868e96;
+      stroke-width: 4px;
+    }
+    .line.entry {
+      stroke: #dee2e6;
+      stroke-width: 3px;
+    }
+    .line1 {
+      fill: none;
+      stroke: #1862ab;
+      stroke-width: 2px;
+    }
+    .line1.entry {
+      stroke: #72c3fc;
+    }
+    .line2 {
+      fill: none;
+      stroke: #2b8a3e;
+      stroke-width: 2px;
+    }
+    .line2.entry {
+      stroke: #8ce99a;
+    }
+    .line3 {
+      fill: none;
+      stroke: #e67700;
+      stroke-width: 2px;
+    }
+    .line3.entry {
+      stroke: #ffe066;
+    }
+    .line4 {
+      fill: none;
+      stroke: #0b7285;
+      stroke-width: 2px;
+    }
+    .line4.entry {
+      stroke: #66d9e8;
+    }
+    .line5 {
+      fill: none;
+      stroke: #5f3dc4;
+      stroke-width: 2px;
+    }
+    .line5.entry {
+      stroke: #b197fc;
+    }
+    .tooltip {
+      position: absolute;
+      text-align: center;
+      width: 80px;
+      height: auto;
+      padding: 5px;
+      font: 12px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1>  10월 15일 이후 매주 토요일, 광화문 광장에서 도보 30분 이내의 지하철역 승객수 변화</h1>
+        <div id="graph-30min"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+            <div id="sub-graphs"></div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p>
+          데이터에 대한 자세한 사항은 <a href="https://github.com/hanbyul-here/seoul-metro-turnstile-data">리포</a>를 확인해주세요.
+        </p>
+        <p>
+          <a href="https://icons8.com/web-app/26379/Spa-Candle">촛불 아이콘 출처</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://d3js.org/d3.v4.js"></script>
+  <script src="./js/graph.js"></script>
+</body>
+</html>
