@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>서울시 지하철역별 이용객 데이터</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./assets/bootstrap.min.css">
+  <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+    #wrapper {
+      margin-left: calc(50% - 50vw);
+      width: 100vw;
+      height: 700px;
+    }
+    #map-30min {
+      width: 100%;
+      height: 700px;
+    }
+    .info {
+      background-color: #fff;
+      padding: 3px;
+    }
+    .legend {
+    line-height: 18px;
+    color: #555;
+    }
+    .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1> 2016년 10월 15일 이후 매주 토요일</h1>
+        <h1> 광화문 광장에서 도보 30분 이내의 지하철역 승객 데이터</h1>
+<!--         <div id="wrapper">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-md-6 col-sm-12"> -->
+                <div id="map-30min"></div>
+              <!-- </div> -->
+<!--               <div class="col-md-6 col-sm-12">
+                <div id="data-graph"></div>
+              </div> -->
+<!--             </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        데이터에 대한 자세한 사항은 <a href="https://github.com/hanbyul-here/seoul-metro-turnstile-data">리포</a>를 확인해주세요.
+      </p>
+    </div>
+  </div>
+</div>
+  </body>
+  <script src="https://mapzen.com/js/mapzen.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.js"></script>
+  <script>
+    // map
+    var map = L.Mapzen.map('map-30min',{
+      debugTangram: true,
+      scene: './assets/scene.yaml',
+      minZoom: 12,
+      scrollWheelZoom: false
+    });
+    map.setView([37.5759,126.9768], 13);
+
+    // add legend for isochrone data
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function (map) {
+
+      var div = L.DomUtil.create('div', 'info legend'),
+        grades = ['15분', '30분', '45분', '60분'];
+        colors = ['#175700', '#4c7a00', '#85ae30', '#d9e5b2'];
+        div.innerHTML = '광화문에서 도보로<br>';
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + colors[i] + '"></i> ' +
+                grades[i] + ' 이내 <br>';
+        }
+
+        return div;
+    };
+
+    legend.addTo(map);
+
+    map.on('tangramloaded', function(e) {
+      var scene = e.tangramLayer.scene;
+      // feature edit popup
+      map.getContainer().addEventListener('mousedown', function (event) {
+        var picking = true;
+        var latlng = map.mouseEventToLatLng(event);
+
+        var pixel = map.mouseEventToLayerPoint(event);
+
+        scene.getFeatureAt(pixel).then(function(selection) {
+          console.log(selection);
+        });
+      });
+    });
+
+
+  </script>
+</body>
+</html>
