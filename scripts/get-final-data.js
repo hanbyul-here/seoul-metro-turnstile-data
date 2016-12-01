@@ -4,7 +4,7 @@ var fs = require('fs');
 var jsonfile = require('jsonfile');
 
 var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119'];
-var contour = 15;
+var contour = 30;
 var dateCount = dates.length-1;
 
 
@@ -67,7 +67,7 @@ function makeItEasyTable(data) {
 
       for (var datum of data) {
         for (var station of datum.stations) {
-          if(station.station_name === obj.station_name) {
+          if(station.station_name === obj.station_name && station.line_num === obj.line_num) {
             obj[datum.date] = [];
             obj[datum.date].push({
               entries: station.entries,
