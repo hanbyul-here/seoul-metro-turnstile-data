@@ -7,12 +7,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./assets/bootstrap.min.css">
   <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
+  <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
   <style> /* set the CSS */
     body {
       position: relative;
     }
+
+    #map {
+      width: 100%;
+      height: 600px;
+    }
+    @media screen and (max-width: 768px) {
+      #map {
+        width: 100%;
+        height: 350px;
+      }
+    }
+    .info {
+      background-color: #fff;
+      padding: 3px;
+    }
+    .map-legend {
+    line-height: 18px;
+    color: #555;
+    }
+    .map-legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+
+
     #graph-30min {
-      margin-top: 30px;
+      margin: 30px 0;
       position: relative;
     }
     .legend {
@@ -92,6 +121,11 @@
     </div>
     <div class="row">
       <div class="col-md-12">
+        <div id="map"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
             <div id="sub-graphs"></div>
 
       </div>
@@ -107,8 +141,45 @@
       </div>
     </div>
   </div>
-
+  <script src="https://mapzen.com/js/mapzen.min.js"></script>
   <script src="https://d3js.org/d3.v4.js"></script>
   <script src="./js/graph.js"></script>
+  <script>
+    // map
+    var map = L.Mapzen.map('map',{
+      debugTangram: true,
+      scene: './assets/scene.yaml',
+      minZoom: 12,
+      scrollWheelZoom: false
+    });
+
+    map.setView([37.5759,126.9779], 14);
+    map.zoomControl.setPosition('topleft');
+
+    // add legend for isochrone data
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function (map) {
+
+      var div = L.DomUtil.create('div', 'info map-legend'),
+        grades = ['15분', '30분', '45분', '60분'];
+        colors = ['#175700', '#4c7a00', '#85ae30', '#d9e5b2'];
+        div.innerHTML = '광화문에서 도보로<br>';
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + colors[i] + '"></i> ' +
+                grades[i] + ' 이내 <br>';
+        }
+
+      return div;
+    };
+
+    legend.addTo(map);
+
+    L.Mapzen.hash({
+      map: map
+    });
+
+  </script>
 </body>
 </html>
