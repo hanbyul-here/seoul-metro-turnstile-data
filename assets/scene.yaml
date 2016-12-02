@@ -23,6 +23,10 @@ sources:
     type: GeoJSON
     url: './isochrone.json'
 
+  subway_line:
+    type: GeoJSON
+    url: '../data/subway-line-shape.geojson'
+
   stations:
     type: GeoJSON
     url: '../data/30min-from-center/total-based-on-station.geojson'
@@ -39,7 +43,7 @@ layers:
               if (feature.contour == 30) return '#9fbf40';
               if (feature.contour == 45) return '#b2cc66';
               if (feature.contour == 60) return '#d9e5b2';
-            }
+           }
   stations:
     data: { source: stations}
     draw:
@@ -57,3 +61,14 @@ layers:
           font:
             fill: white
             size: 12px
+  subway_line:
+    data: { source: subway_line}
+    draw:
+      lines:
+        order: 3000
+        color: |
+          function() {
+            console.log(feature);
+            return feature.line_color
+          }
+        width: 3px
