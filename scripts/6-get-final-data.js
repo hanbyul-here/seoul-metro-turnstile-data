@@ -39,7 +39,7 @@ function readJson () {
 
   } else {
     writeFile(total, 'date-based');
-    var newtotal = makeItEasyTable(total);
+    var newtotal = makeStationBasedData(total);
     writeFile(newtotal, 'station-based');
   }
 
@@ -47,7 +47,7 @@ function readJson () {
 
 
 
-function makeItEasyTable(data) {
+function makeStationBasedData(data) {
   var newData = [];
   var totalData = {
     station_name: 'total',
@@ -85,7 +85,7 @@ function makeItEasyTable(data) {
       newData.push(obj);
 
   }
-  // push total just for easy table
+
   newData.push(totalData)
   return newData;
 }

@@ -7,27 +7,30 @@ var jsonfile = require('jsonfile');
 
 var subwayLineObj = {};
 
+var lines = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'G', 'K', 'S', 'SU'];
+var lineCount = lines.length - 1;
+
 var subwayStationList = [];
-var stationCount;// = 2;
+var stationCount;
 var lineNum;
 
-fs.readFile(__dirname + '/raw-station-data/lineSU.json', function(err, data) {
-  const result = JSON.parse(data);
-    for (const station of result.SearchSTNBySubwayLineService.row) {
-      lineNum = station.LINE_NUM;
-      const obj = {
-        station_cd: station.STATION_CD,
-        station_name: station.STATION_NM,
-        station_fr_code: station.FR_CODE
+function readFile() {
+  if (lineCount)
+  fs.readFile(__dirname + '/raw-station-data/line'+lines[lineCount]+'.json', function(err, data) {
+    const result = JSON.parse(data);
+      for (const station of result.SearchSTNBySubwayLineService.row) {
+        lineNum = station.LINE_NUM;
+        const obj = {
+          station_cd: station.STATION_CD,
+          station_name: station.STATION_NM,
+          station_fr_code: station.FR_CODE
+        }
+        subwayStationList.push(obj);
       }
-      subwayStationList.push(obj);
-    }
-
-    stationCount = subwayStationList.length-1;
-
-    makeCall();
-});
-
+      stationCount = subwayStationList.length-1;
+      makeCall();
+  });
+}
 
 function makeCall() {
   if (stationCount > -1) {
@@ -70,9 +73,15 @@ function makeCall() {
 
     request.send();
   } else {
-    subwayLineObj.line = lineNum;
-    subwayLineObj.stations = subwayStationList;
-    writeFile(subwayLineObj);
+    if (lineCount > -1){
+      subwayLineObj.line = lineNum;
+      subwayLineObj.stations = subwayStationList;
+      writeFile(subwayLineObj);
+      lineCount--;
+      readFile();
+    } else {
+      console.log('done');
+    }
   }
 }
 
@@ -81,3 +90,4 @@ function writeFile(obj) {
   jsonfile.writeFileSync(__dirname + '/station-data-with-location/line'+obj.line +'.json', obj);
 }
 
+readFile();

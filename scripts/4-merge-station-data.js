@@ -33,8 +33,6 @@ function readJson () {
 
 
 
-
-
 function writeFile(obj) {
   console.log("write file")
   jsonfile.writeFileSync(__dirname + '/stations-inside-'+contour+'min/total.json', obj);
