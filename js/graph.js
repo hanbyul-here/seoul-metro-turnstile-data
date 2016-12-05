@@ -147,7 +147,7 @@ d3.json('./data/30min-from-center/total-based-on-date.json', function(error, dat
   // Add the X Axis
   svg.append('g')
       .attr('transform', 'translate(0,' + height + ')')
-      .call(d3.axisBottom(x).tickValues(dates).tickFormat(formatTime))
+      .call(d3.axisBottom(x).tickValues(dates).tickFormat(function(d, i) { if ( i%2 ==0) return formatTime(d); else return '';}))
       .attr('font-size','12px');
 
   // Add the Y Axis
@@ -163,7 +163,6 @@ d3.json('./data/30min-from-center/total-based-on-date.json', function(error, dat
     .html('<i style=background:#868e96>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> 하차 <br>'+
             '<i style=background:#dee2e6>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i> 승차')
 
-  console.log(subData);
   // Draw sub graphs
   subData.forEach(function(d) {
     drawSubGraph(d.station_name, d.line_num, d.turnstile);
@@ -244,7 +243,7 @@ var drawSubGraph = function(station_name, station_line, data) {
 
   subSvg.append('g')
       .attr('transform', 'translate(0,' + subHeight + ')')
-      .call(d3.axisBottom(subX).tickValues(dates).tickFormat(formatTime));
+      .call(d3.axisBottom(subX).tickValues(dates).tickFormat(function(d, i) { if ( i%2 ==0) return formatTime(d); else return '';}))
 
   subSvg.append('g')
       .call(d3.axisLeft(subY).tickValues([subMin, middle, subMax]));
@@ -284,6 +283,5 @@ var drawSubGraph = function(station_name, station_line, data) {
             .duration(500)
             .style('opacity', 0);
     });
-
 
 }
