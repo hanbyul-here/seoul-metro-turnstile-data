@@ -15,9 +15,9 @@ var stationCount;
 var lineNum;
 
 function readFile() {
-  if (lineCount)
   fs.readFile(__dirname + '/raw-station-data/line'+lines[lineCount]+'.json', function(err, data) {
     const result = JSON.parse(data);
+    subwayStationList = [];
       for (const station of result.SearchSTNBySubwayLineService.row) {
         lineNum = station.LINE_NUM;
         const obj = {
@@ -35,6 +35,7 @@ function readFile() {
 function makeCall() {
   if (stationCount > -1) {
     console.log(stationCount);
+    console.log(lineCount);
     const request = new XMLHttpRequest();
 
     var url = 'http://openAPI.seoul.go.kr:8088/'+key+'/json/SearchLocationOfSTNByIDService/1/5/'+subwayStationList[stationCount].station_cd+'/';
@@ -51,8 +52,6 @@ function makeCall() {
         const lon = data.SearchLocationOfSTNByIDService.row[0].YPOINT_WGS;
 
         if (lat && lon) {
-          console.log(subwayStationList[stationCount].station_name);
-          console.log(data.SearchLocationOfSTNByIDService.row[0].STATION_NM);
           subwayStationList[stationCount].lat = lat;
           subwayStationList[stationCount].lon = lon;
         } else {
@@ -73,11 +72,11 @@ function makeCall() {
 
     request.send();
   } else {
+    lineCount--;
     if (lineCount > -1){
       subwayLineObj.line = lineNum;
       subwayLineObj.stations = subwayStationList;
       writeFile(subwayLineObj);
-      lineCount--;
       readFile();
     } else {
       console.log('done');
