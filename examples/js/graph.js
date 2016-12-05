@@ -187,7 +187,7 @@ var drawSubGraph = function(station_name, station_line, data) {
 
   var subDiv = d3.select('#line'+station_line)
                   .append('div')
-              .attr('class', 'sub-graph col-md-4 col-xs-12');
+              .attr('class', 'sub-graph col-md-6 col-xs-12');
 
   var subDivWidth = document.querySelector('.sub-graph').clientWidth*0.9;
   var subHeight = 100;
