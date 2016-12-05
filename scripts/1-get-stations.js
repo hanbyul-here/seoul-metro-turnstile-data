@@ -1,7 +1,6 @@
 'use strict';
 
 var fs = require('fs');
-var xml2js = require('xml2js');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var key = require('./key').key;
 
