@@ -37,6 +37,8 @@ Data you can find:
 - Turnstile Data of Metro Stations within 15 mins walk from Gwang-Hwa-Moon Plaza, where protests happen.
 - Turnstile Data of Metro Stations within 30 mins walk from Gwang-Hwa-Moon Plaza
 
+You can find the final turnstile data in `data` , scripts that I used to collect the data in `scripts`, examples using the data in `examples`.
+
 You can also check out the data on [gh-pages](https://hanbyul-here/github.io/seoul-metro-turnstile-data).
 
 The data of the repo follows [MIT License](https://opensource.org/licenses/MIT)
