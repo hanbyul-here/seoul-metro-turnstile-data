@@ -23,7 +23,7 @@
 
 ## Seoul Metro Turnstile Data
 
-[South Korea is seeing a series of big protests against President Park Geun-hye.](http://www.nytimes.com/2016/11/26/world/asia/korea-park-geun-hye-protests.html?_r=0) Protests are happening on every Saturday after 15th Oct, in central Seoul. 2016 The data of this repo was collected from [Seoul Open Data Plaza](http://data.seoul.go.kr/) in a hope to better understand the attendance statistics of the protest.
+[South Korea is seeing a series of big protests against President Park Geun-hye.](http://www.nytimes.com/2016/11/26/world/asia/korea-park-geun-hye-protests.html?_r=0) Protests are happening on every Saturday after 29th Oct, in central Seoul. The data of this repo was collected from [Seoul Open Data Plaza](http://data.seoul.go.kr/) in a hope to better understand the attendance statistics of the protest.
 
 APIs used for this project:
 
@@ -39,4 +39,4 @@ Data you can find:
 
 You can also check out the data on [gh-pages](https://hanbyul-here/github.io/seoul-metro-turnstile-data).
 
-The data of the repo follows (MIT License)[https://opensource.org/licenses/MIT].
+The data of the repo follows [MIT License](https://opensource.org/licenses/MIT)
