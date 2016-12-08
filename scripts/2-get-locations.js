@@ -14,6 +14,8 @@ var subwayStationList = [];
 var stationCount;
 var lineNum;
 
+var requestFrequency = 200; // time gap between requests to openAPI.seoul.go.kr:8080
+
 function readFile() {
   fs.readFile(__dirname + '/raw-station-data/line'+lines[lineCount]+'.json', function(err, data) {
     const result = JSON.parse(data);
@@ -60,7 +62,7 @@ function makeCall() {
           subwayStationList.splice(stationCount, 1);
         }
         stationCount--;
-        setTimeout(makeCall, 1000);
+        setTimeout(makeCall, requestFrequency);
       } else {
         console.log('We reached our target server, but it returned an error')
       }
