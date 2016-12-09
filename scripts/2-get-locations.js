@@ -7,31 +7,37 @@ var jsonfile = require('jsonfile');
 
 var subwayLineObj = {};
 
+var lines = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'G', 'K', 'S', 'SU'];
+var lineCount = lines.length - 1;
+
 var subwayStationList = [];
-var stationCount;// = 2;
+var stationCount;
 var lineNum;
 
-fs.readFile(__dirname + '/raw-station-data/lineSU.json', function(err, data) {
-  const result = JSON.parse(data);
-    for (const station of result.SearchSTNBySubwayLineService.row) {
-      lineNum = station.LINE_NUM;
-      const obj = {
-        station_cd: station.STATION_CD,
-        station_name: station.STATION_NM,
-        station_fr_code: station.FR_CODE
+var requestFrequency = 200; // time gap between requests to openAPI.seoul.go.kr:8080
+
+function readFile() {
+  fs.readFile(__dirname + '/raw-station-data/line'+lines[lineCount]+'.json', function(err, data) {
+    const result = JSON.parse(data);
+    subwayStationList = [];
+      for (const station of result.SearchSTNBySubwayLineService.row) {
+        lineNum = station.LINE_NUM;
+        const obj = {
+          station_cd: station.STATION_CD,
+          station_name: station.STATION_NM,
+          station_fr_code: station.FR_CODE
+        }
+        subwayStationList.push(obj);
       }
-      subwayStationList.push(obj);
-    }
-
-    stationCount = subwayStationList.length-1;
-
-    makeCall();
-});
-
+      stationCount = subwayStationList.length-1;
+      makeCall();
+  });
+}
 
 function makeCall() {
   if (stationCount > -1) {
     console.log(stationCount);
+    console.log(lineCount);
     const request = new XMLHttpRequest();
 
     var url = 'http://openAPI.seoul.go.kr:8088/'+key+'/json/SearchLocationOfSTNByIDService/1/5/'+subwayStationList[stationCount].station_cd+'/';
@@ -48,8 +54,6 @@ function makeCall() {
         const lon = data.SearchLocationOfSTNByIDService.row[0].YPOINT_WGS;
 
         if (lat && lon) {
-          console.log(subwayStationList[stationCount].station_name);
-          console.log(data.SearchLocationOfSTNByIDService.row[0].STATION_NM);
           subwayStationList[stationCount].lat = lat;
           subwayStationList[stationCount].lon = lon;
         } else {
@@ -58,7 +62,7 @@ function makeCall() {
           subwayStationList.splice(stationCount, 1);
         }
         stationCount--;
-        setTimeout(makeCall, 1000);
+        setTimeout(makeCall, requestFrequency);
       } else {
         console.log('We reached our target server, but it returned an error')
       }
@@ -70,9 +74,15 @@ function makeCall() {
 
     request.send();
   } else {
-    subwayLineObj.line = lineNum;
-    subwayLineObj.stations = subwayStationList;
-    writeFile(subwayLineObj);
+    lineCount--;
+    if (lineCount > -1){
+      subwayLineObj.line = lineNum;
+      subwayLineObj.stations = subwayStationList;
+      writeFile(subwayLineObj);
+      readFile();
+    } else {
+      console.log('done');
+    }
   }
 }
 
@@ -81,3 +91,4 @@ function writeFile(obj) {
   jsonfile.writeFileSync(__dirname + '/station-data-with-location/line'+obj.line +'.json', obj);
 }
 
+readFile();

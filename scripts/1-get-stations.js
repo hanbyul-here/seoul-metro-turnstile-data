@@ -1,14 +1,16 @@
 'use strict';
 
 var fs = require('fs');
-var xml2js = require('xml2js');
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var key = require('./key').key;
 
 var jsonfile = require('jsonfile');
 
+//A: 공항철도, B: 분당선, G: 경춘선, K: 경의중앙선, S: 신분당선, SU: 수인선
 var lines = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'G', 'K', 'S', 'SU'];
 var lineCount = lines.length - 1;
+
+var requestFrequency = 200; // time gap between requests to openAPI.seoul.go.kr:8080
 
 function makeCall() {
   if (lineCount > -1) {
@@ -25,7 +27,7 @@ function makeCall() {
         writeFile(data);
         lineCount--;
 
-        setTimeout(makeCall, 1000);
+        setTimeout(makeCall, requestFrequency);
       } else {
         console.log('We reached our target server, but it returned an error')
       }
