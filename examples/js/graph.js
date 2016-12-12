@@ -1,7 +1,7 @@
 // set the dimensions and margins of the graph
 var margin = {top: 20, right: 20, bottom: 30, left: 60},
     width = document.getElementById('graph-30min').clientWidth - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 400 - margin.top - margin.bottom;
 
 // parse the date / time
 var parseTime = d3.timeParse('%Y%m%d');
@@ -267,8 +267,8 @@ var drawSubGraph = function(station_name, station_line, data) {
           .duration(200)
           .style('opacity', .9);
       div .html(formatTime(d.date) + '<br/>'  + d3.format(',')(d.exits))
-          .style('left', (d3.event.pageX) + 'px')
-          .style('top', (d3.event.pageY - 28) + 'px');
+          .style('left', (d3.event.pageX - 40) + 'px')
+          .style('top', (d3.event.pageY - 35) + 'px');
     })
     .on('mouseover', function(d) {
       div.transition()
