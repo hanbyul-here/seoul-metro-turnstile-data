@@ -3,8 +3,8 @@
 var fs = require('fs');
 var jsonfile = require('jsonfile');
 
-var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119'];
-var contour = 30;
+var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119', '20161126', '20161203'];
+var contour = 15;
 var dateCount = dates.length-1;
 
 
