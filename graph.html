@@ -44,6 +44,7 @@
       margin: 30px 0;
       position: relative;
     }
+
     .legend {
       position: absolute;
       right: 30px;
@@ -121,6 +122,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
+      <h4>각 역의 위치</h4>
         <div id="map"></div>
       </div>
     </div>
@@ -153,7 +155,7 @@
       scrollWheelZoom: false
     });
 
-    map.setView([37.5759,126.9779], 14);
+    map.setView([37.5676, 126.9802], 14);
     map.zoomControl.setPosition('topleft');
 
     // add legend for isochrone data

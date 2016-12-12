@@ -68,7 +68,6 @@ layers:
         order: 3000
         color: |
           function() {
-            console.log(feature);
             return feature.line_color
           }
         width: 3px
