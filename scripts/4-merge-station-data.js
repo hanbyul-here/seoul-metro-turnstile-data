@@ -9,7 +9,7 @@ var nearStationList = [];
 var contour = 15;
 var subwayData = {};
 
-var fileReadFrequency = 200; // time ga between reading station info json files
+var fileReadFrequency = 200; // time gap between reading station info json files
 
 function readJson () {
   if (lineCount > -1) {
