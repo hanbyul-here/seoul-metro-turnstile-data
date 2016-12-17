@@ -9,7 +9,7 @@ var missedStation = {};
 
 var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119', '20161126', '20161126', '20161203'];
 var dateCount = dates.length-1;
-var contour = 30;
+var contour = 15;
 
 var requestFrequency = 200; // time gap between requests to openAPI.seoul.go.kr:8080
 
