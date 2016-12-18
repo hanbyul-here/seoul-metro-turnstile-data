@@ -47,7 +47,7 @@ var getDateString = function(ds) {
 var dates = [];
 
 // Get the data
-d3.json('./data/30min-from-center/total-based-on-date.json', function(error, data) {
+d3.json('./data/subway/30min-from-center/total-based-on-date.json', function(error, data) {
   if (error) throw error;
   // format the data
   data.reverse();
