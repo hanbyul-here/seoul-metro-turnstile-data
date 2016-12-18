@@ -1,4 +1,4 @@
-d3.json('./data/15min-from-center/total-based-on-station.json', function (err, data) {
+d3.json('./data/subway/15min-from-center/total-based-on-station.json', function (err, data) {
 
 var tData = trimData(data);
   d3.select('#table-2016-15min')
@@ -11,7 +11,7 @@ var tData = trimData(data);
 });
 
 
-d3.json('./data/30min-from-center/total-based-on-station.json', function (err, data) {
+d3.json('./data/subway/30min-from-center/total-based-on-station.json', function (err, data) {
 
   var tData = trimData(data);
   d3.select('#table-2016-30min')

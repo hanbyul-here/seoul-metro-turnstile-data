@@ -25,11 +25,11 @@ sources:
 
   subway_line:
     type: GeoJSON
-    url: '../data/subway-line-shape.geojson'
+    url: '../data/subway/subway-line-shape.geojson'
 
   stations:
     type: GeoJSON
-    url: '../data/30min-from-center/total-based-on-station.geojson'
+    url: '../data/subway/30min-from-center/total-based-on-station.geojson'
 
 layers:
   isochrone:
