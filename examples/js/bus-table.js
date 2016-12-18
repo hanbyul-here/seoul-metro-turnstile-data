@@ -1,19 +1,7 @@
-// d3.json('./data/15min-from-center/total-based-on-station.json', function (err, data) {
-
-// var tData = trimData(data);
-//   d3.select('#table-2016-15min')
-//   .selectAll("table")
-//     .data([tData])
-//     .enter().append("table")
-//     .attr('class', 'table table-bordered')
-//     .call(recurse);
-
-// });
-
-
-d3.json('./data/30min-from-center/total-based-on-station.json', function (err, data) {
+d3.json('./data/bus/total-based-on-station.json', function (err, data) {
 
   var tData = trimData(data);
+
   d3.select('#table-2016-30min')
   .selectAll("table")
     .data([tData])
@@ -32,10 +20,10 @@ function trimData(data) {
     var datum = data[i];
     var obj = {};
     obj.station_name = data[i].station_name;
-    obj.line_num = data[i].line_num;
-
+    obj.station_cd = data[i].station_cd;
     for(var key in datum) {
-      if(['station_name', 'line_num', 'lat', 'lon', 'station_cd'].indexOf(key) < 0) {
+      console.log(datum[key])
+      if(['station_name', 'tm_x', 'tm_y', 'route_id','station_cd'].indexOf(key) < 0) {
         obj[key[0]+key[1]+key[2]+key[3]+ '년 ' + key[4]+key[5] + '월 '+ key[6]+ key[7] + '일']  = datum[key];
       }
     }
@@ -82,8 +70,8 @@ function recurse(sel) {
             case 'exits':
               return '하차';
               break;
-            case 'line_num':
-              return '호선';
+            case 'station_cd':
+              return '정류장 고유번호';
               break;
             case 'total':
               return '총합';

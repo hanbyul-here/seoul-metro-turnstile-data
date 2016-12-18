@@ -3,8 +3,7 @@
 var fs = require('fs');
 var jsonfile = require('jsonfile');
 
-var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119'];
-var contour = 15;
+var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119', '20161126', '20161126', '20161203'];
 var dateCount = dates.length-1;
 
 
@@ -50,10 +49,7 @@ function readJson () {
 function makeStationBasedOne(data) {
   var newData = [];
   var totalData = {
-    station_name: 'total',
-    line_num: '',
-    lat: '',
-    lon: ''
+    station_name: 'total'
   };
 
   for (var st of data[0].stations) {

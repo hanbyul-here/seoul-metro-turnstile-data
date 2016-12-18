@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>서울시 버스 정류장 이용객 데이터</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./assets/bootstrap.min.css">
+  <style>
+  table table {
+    width: 100%;
+  }
+  table tr:last-child {
+    background-color: #eee;
+  }
+  table tr:last-child table tr:last-child {
+    background-color: #eee;
+  }
+  table thead tr:last-child {
+    background-color: #fff;
+  }
+  table table tr:last-child {
+    background-color: #fff;
+  }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="row">
+      <div class="col-md-12">
+        <h1>  광화문 광장에서 도보 30분 이내의 버스정류장 승객 데이터</h1>
+        <div id="table-2016-30min"></div>
+      </div>
+    </div>
+
+
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        데이터에 대한 자세한 사항은 <a href="https://github.com/hanbyul-here/seoul-metro-turnstile-data">리포</a>를 확인해주세요.
+      </p>
+    </div>
+  </div>
+</div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.js"></script>
+  <script src="./js/bus-table.js"></script>
+</body>
+</html>
