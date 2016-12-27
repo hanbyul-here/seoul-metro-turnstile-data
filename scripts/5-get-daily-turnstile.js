@@ -7,7 +7,7 @@ var jsonfile = require('jsonfile');
 var newJsonWithUsageData = {};
 var missedStation = {};
 
-var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119', '20161126', '20161126', '20161203'];
+var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119', '20161126', '20161126', '20161203', '20161210', '20161217'];
 var dateCount = dates.length-1;
 var contour = 15;
 
