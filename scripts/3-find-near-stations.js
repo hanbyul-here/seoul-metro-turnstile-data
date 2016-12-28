@@ -5,10 +5,10 @@ var jsonfile = require('jsonfile');
 var contour;
 var isochroneData;
 
-var lines = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'G', 'K', 'S', 'SU'];
+var lines = require('./params').lines;
 var lineCount = lines.length-1;
 
-var requestFrequency = 200; // time gap between requests to openAPI.seoul.go.kr:8080
+var requestFrequency = require('./params').requestFrequency;
 
 function readJson () {
   // I downloaded the isochrone data from Mapzen Mobility Explorer

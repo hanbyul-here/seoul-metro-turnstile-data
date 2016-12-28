@@ -2,14 +2,14 @@
 var fs = require('fs');
 var jsonfile = require('jsonfile');
 
-var lines = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'G', 'K', 'S', 'SU'];
+var lines = require('./params').lines;
 
 var lineCount = lines.length-1;
 var nearStationList = [];
 var contour = 15;
 var subwayData = {};
 
-var fileReadFrequency = 200; // time gap between reading station info json files
+var fileReadFrequency = require('./params').requestFrequency;
 
 function readJson () {
   if (lineCount > -1) {

@@ -7,11 +7,11 @@ var jsonfile = require('jsonfile');
 var newJsonWithUsageData = {};
 var missedStation = {};
 
-var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119', '20161126', '20161126', '20161203', '20161210', '20161217'];
+var dates = require('./params').dates;
 var dateCount = dates.length-1;
-var contour = 15;
+var contour = 30;
 
-var requestFrequency = 200; // time gap between requests to openAPI.seoul.go.kr:8080
+var requestFrequency = require('./params').requestFrequency;
 
 function readJson () {
   fs.readFile(__dirname + '/stations-inside-'+contour+'min/total.json', function(err, data) {
