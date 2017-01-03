@@ -1,0 +1,112 @@
+import:
+  - https://mapzen.com/carto/refill-style-no-labels/4/refill-style-no-labels.yaml
+
+textures:
+  pois:
+    url: './refill@2x.png'
+    filtering: mipmap
+    sprites:
+      # define sprites: [x origin, y origin, width, height]
+      train: [410, 0, 36, 36]
+
+styles:
+  alpha_polygons:
+    base: polygons
+    blend: multiply
+  icons:
+    base: points
+    texture: pois
+    blend_order: 1
+
+sources:
+  isochrone:
+    type: GeoJSON
+    url: './isochrone.json'
+  subway_line:
+    type: GeoJSON
+    url: '../data/subway-line-shape.geojson'
+
+  stations:
+    type: GeoJSON
+    url: './lets-see.geojson'
+  previous_data:
+    type: GeoJSON
+    url: './data-to-compare.geojson'
+
+layers:
+  isochrone:
+    data: { source: isochrone}
+    draw:
+      alpha_polygons:
+        order: 2999
+        color: |
+          function() {
+              if (feature.contour == 30) return '#9fbf40';
+           }
+  subway_line:
+    data: { source: subway_line}
+    draw:
+      lines:
+        order: 3000
+        color: |
+          function() {
+            return feature.line_color
+          }
+        width: 3px
+        outline:
+          color: gray
+          width: 1px
+  # previous_data:
+  #   data: { source: previous_data}
+  #   draw:
+  #     points:
+  #       order: 3500
+  #       size: |
+  #         function () {
+  #           var size = 0;
+  #           for (var i = 0; i < feature.dates.length;i++) {
+  #             size += feature.dates[i].turnstile_data[0].exits;
+  #           }
+  #           return size/7000;
+  #         }
+  #       color: [1.0, 0.8, 0.0]
+  stations:
+    data: { source: stations}
+    draw:
+      points:
+        interactive: true
+        centroid: true
+        collide: false
+        color: [1.0, 0.2, 0.2]
+        size: |
+          function () {
+            var size = 0;
+            for (var i = 0; i < feature.dates.length;i++) {
+                size += feature.dates[i].turnstile_data[0].exits;
+            }
+            return size/7500;
+          }
+    previous-data:
+      draw:
+        points:
+          centroid: true
+          collide: false
+          color: [1.0, 0.8, 0.0]
+          size: |
+            function () {
+              var size = 0;
+              for (var i = 0; i < feature.previous_data.length;i++) {
+                size += feature.previous_data[i].turnstile_data[0].exits;
+              }
+              return size/7500;
+            }
+    station-labels:
+      filter: { $zoom: { min: 14} }
+      draw:
+        text:
+          collide: false
+          offset: [0px, 15px]
+          text_source: station_name
+          font:
+            fill: white
+            size: 12px
