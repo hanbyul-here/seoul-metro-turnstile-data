@@ -6,8 +6,12 @@ var lines = require('./params').lines;
 
 var lineCount = lines.length-1;
 var nearStationList = [];
-var contour = 15;
 var subwayData = {};
+
+// Isochrone sends 60mins, 45mins, 30mins, 15mins data in that order
+// If you want to tweak the travle time, change travelTime (60 / 45 / 30 / 15)
+var travelTime = '30';
+var contour = travelTime;
 
 var fileReadFrequency = require('./params').requestFrequency;
 

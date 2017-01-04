@@ -5,6 +5,11 @@ var jsonfile = require('jsonfile');
 var contour;
 var isochroneData;
 
+// Isochrone sends 60mins, 45mins, 30mins, 15mins data in that order
+// If you want to tweak the travle time, change travelTime (60 / 45 / 30 / 15)
+var travelTime = '30';
+var contourIndex = require('./params').contour[travelTime];
+
 var lines = require('./params').lines;
 var lineCount = lines.length-1;
 
@@ -46,12 +51,8 @@ function readStationData() {
 // http://stackoverflow.com/questions/31790344/determine-if-a-point-reside-inside-a-leaflet-polygon
 
 function isMarkerInsidePolygon(marker, poly) {
-    // Isochrone sends 60mins, 45mins, 30mins, 15mins data in that order
-    // If you want to tweak the travle time, change the index number below
-    // ex. features[2](30mins) -> features[3](15mins)
-
-    var polyPoints = poly.features[2].geometry.coordinates[0];
-    contour = poly.features[2].properties.contour;
+    var polyPoints = poly.features[contourIndex].geometry.coordinates[0];
+    contour = poly.features[contourIndex].properties.contour;
     var x = marker.lat;
     var y = marker.lon;
 
