@@ -4,7 +4,7 @@ var fs = require('fs');
 var jsonfile = require('jsonfile');
 
 var dates = require('./params').dates;
-var contour = 30;
+var travelTime = require('./params').travelTime;
 var dateCount = dates.length-1;
 
 
@@ -12,7 +12,7 @@ var total = [];
 
 function readJson () {
   if (dateCount > -1) {
-    fs.readFile(__dirname + '/turnstile-data/'+contour+'min/'+dates[dateCount]+'.json', function(err, data) {
+    fs.readFile(__dirname + '/turnstile-data/'+travelTime+'min/'+dates[dateCount]+'.json', function(err, data) {
 
       var subwayData = JSON.parse(data);
       var newObj = {};
@@ -93,7 +93,7 @@ function makeStationBasedData(data) {
 
 function writeFile(obj, fileName) {
   console.log('write ' + fileName +' file');
-  jsonfile.writeFileSync(__dirname + '/turnstile-data/'+contour+'min/'+ fileName + '.json', obj);
+  jsonfile.writeFileSync(__dirname + '/turnstile-data/'+travelTime+'min/'+ fileName + '.json', obj);
 }
 
 readJson();

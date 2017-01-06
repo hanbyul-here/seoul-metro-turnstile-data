@@ -9,12 +9,12 @@ var missedStation = {};
 
 var dates = require('./params').dates;
 var dateCount = dates.length-1;
-var contour = 30;
+var travelTime = require('./params').travelTime;
 
 var requestFrequency = require('./params').requestFrequency;
 
 function readJson () {
-  fs.readFile(__dirname + '/stations-inside-'+contour+'min/total.json', function(err, data) {
+  fs.readFile(__dirname + '/stations-inside-'+travelTime+'min/total.json', function(err, data) {
     var stationData = JSON.parse(data).stations;
     makeCall(stationData);
   });
@@ -87,8 +87,8 @@ function makeCall(stationData) {
 }
 
 function writeFile(obj) {
-  console.log('write file' + __dirname + '/turnstile-data/'+contour+'min/'+dates[dateCount]+'.json');
-  jsonfile.writeFileSync(__dirname + '/turnstile-data/'+contour+'min/'+dates[dateCount]+'.json', obj);
+  console.log('write file' + __dirname + '/turnstile-data/'+travelTime+'min/'+dates[dateCount]+'.json');
+  jsonfile.writeFileSync(__dirname + '/turnstile-data/'+travelTime+'min/'+dates[dateCount]+'.json', obj);
 }
 
 

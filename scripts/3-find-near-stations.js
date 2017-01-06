@@ -2,13 +2,21 @@
 var fs = require('fs');
 var jsonfile = require('jsonfile');
 
-var contour;
 var isochroneData;
 
 // Isochrone sends 60mins, 45mins, 30mins, 15mins data in that order
+// If you want to tweak the travelTime in param.js
+var contourValues = {
+    '60': 0,
+    '45': 1,
+    '30': 2,
+    '15': 3
+  }
+
+// Isochrone sends 60mins, 45mins, 30mins, 15mins data in that order
 // If you want to tweak the travle time, change travelTime (60 / 45 / 30 / 15)
-var travelTime = '30';
-var contourIndex = require('./params').contour[travelTime];
+var travelTime = require('./params').travelTime;
+var contourIndex = contourValues[travelTime];
 
 var lines = require('./params').lines;
 var lineCount = lines.length-1;
@@ -52,7 +60,6 @@ function readStationData() {
 
 function isMarkerInsidePolygon(marker, poly) {
     var polyPoints = poly.features[contourIndex].geometry.coordinates[0];
-    contour = poly.features[contourIndex].properties.contour;
     var x = marker.lat;
     var y = marker.lon;
 
@@ -76,8 +83,8 @@ function isMarkerInsidePolygon(marker, poly) {
 
 
 function writeFile(obj) {
-  console.log('write'+ '/stations-inside-'+contour+'min/line'+obj.line+'.json file');
-  jsonfile.writeFileSync(__dirname + '/stations-inside-'+contour+'min/line'+obj.line+'.json', obj);
+  console.log('write'+ '/stations-inside-'+travelTime+'min/line'+obj.line+'.json file');
+  jsonfile.writeFileSync(__dirname + '/stations-inside-'+travelTime+'min/line'+obj.line+'.json', obj);
 }
 
 readJson();
