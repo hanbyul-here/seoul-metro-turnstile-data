@@ -2,13 +2,26 @@
 var fs = require('fs');
 var jsonfile = require('jsonfile');
 
-var contour;
 var isochroneData;
 
-var lines = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'G', 'K', 'S', 'SU'];
+// Isochrone sends 60mins, 45mins, 30mins, 15mins data in that order
+// If you want to tweak the travelTime in param.js
+var contourValues = {
+    '60': 0,
+    '45': 1,
+    '30': 2,
+    '15': 3
+  }
+
+// Isochrone sends 60mins, 45mins, 30mins, 15mins data in that order
+// If you want to tweak the travle time, change travelTime (60 / 45 / 30 / 15)
+var travelTime = require('./params').travelTime;
+var contourIndex = contourValues[travelTime];
+
+var lines = require('./params').lines;
 var lineCount = lines.length-1;
 
-var requestFrequency = 200; // time gap between requests to openAPI.seoul.go.kr:8080
+var requestFrequency = require('./params').requestFrequency;
 
 function readJson () {
   // I downloaded the isochrone data from Mapzen Mobility Explorer
@@ -46,12 +59,7 @@ function readStationData() {
 // http://stackoverflow.com/questions/31790344/determine-if-a-point-reside-inside-a-leaflet-polygon
 
 function isMarkerInsidePolygon(marker, poly) {
-    // Isochrone sends 60mins, 45mins, 30mins, 15mins data in that order
-    // If you want to tweak the travle time, change the index number below
-    // ex. features[2](30mins) -> features[3](15mins)
-
-    var polyPoints = poly.features[2].geometry.coordinates[0];
-    contour = poly.features[2].properties.contour;
+    var polyPoints = poly.features[contourIndex].geometry.coordinates[0];
     var x = marker.lat;
     var y = marker.lon;
 
@@ -75,8 +83,8 @@ function isMarkerInsidePolygon(marker, poly) {
 
 
 function writeFile(obj) {
-  console.log('write'+ '/stations-inside-'+contour+'min/line'+obj.line+'.json file');
-  jsonfile.writeFileSync(__dirname + '/stations-inside-'+contour+'min/line'+obj.line+'.json', obj);
+  console.log('write'+ '/stations-inside-'+travelTime+'min/line'+obj.line+'.json file');
+  jsonfile.writeFileSync(__dirname + '/stations-inside-'+travelTime+'min/line'+obj.line+'.json', obj);
 }
 
 readJson();

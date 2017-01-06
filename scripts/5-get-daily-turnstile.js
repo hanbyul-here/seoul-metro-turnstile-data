@@ -7,14 +7,14 @@ var jsonfile = require('jsonfile');
 var newJsonWithUsageData = {};
 var missedStation = {};
 
-var dates = ['20161015', '20161022', '20161029', '20161105', '20161112', '20161119', '20161126', '20161126', '20161203', '20161210', '20161217'];
+var dates = require('./params').dates;
 var dateCount = dates.length-1;
-var contour = 15;
+var travelTime = require('./params').travelTime;
 
-var requestFrequency = 200; // time gap between requests to openAPI.seoul.go.kr:8080
+var requestFrequency = require('./params').requestFrequency;
 
 function readJson () {
-  fs.readFile(__dirname + '/stations-inside-'+contour+'min/total.json', function(err, data) {
+  fs.readFile(__dirname + '/stations-inside-'+travelTime+'min/total.json', function(err, data) {
     var stationData = JSON.parse(data).stations;
     makeCall(stationData);
   });
@@ -87,8 +87,8 @@ function makeCall(stationData) {
 }
 
 function writeFile(obj) {
-  console.log('write file' + __dirname + '/turnstile-data/'+contour+'min/'+dates[dateCount]+'.json');
-  jsonfile.writeFileSync(__dirname + '/turnstile-data/'+contour+'min/'+dates[dateCount]+'.json', obj);
+  console.log('write file' + __dirname + '/turnstile-data/'+travelTime+'min/'+dates[dateCount]+'.json');
+  jsonfile.writeFileSync(__dirname + '/turnstile-data/'+travelTime+'min/'+dates[dateCount]+'.json', obj);
 }
 
 

@@ -24,3 +24,6 @@
 5. `5-get-daily-sturnstile.js` 3에서 분류된 역들의 일일 사용량을 가져옵니다.
 6. `6-get-final-data.js`4의 데이터를 합쳐 최종적으로 사용될 데이터를 만듭니다.
 
+스크립트에서 반복적으로 사용되는 변수는 (데이터를 가져올 날짜, 지하철 호선, 서버에 정보를 호출하는 빈도) `params.js`에 저장되어있습니다.
+
+본 르포는 매 주 `param.js` 내의 `dates` 어레이에 업데이트하고 싶은 날짜를 추가한 후 `5-get-daily-sturnstile.js`,`6-get-final-data.js` (`npm run get-data`) 스크립트를 실행하여 데이터를 업데이트합니다.
