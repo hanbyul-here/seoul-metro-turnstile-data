@@ -13,9 +13,6 @@
       padding: 0;
       margin: 0;
     }
-    h4 {
-      margin: 5px 0 5px 15px;
-    }
     #map-30min {
       width: 100%;
       height: 100%;
@@ -30,14 +27,30 @@
       stroke: rgb(255, 204, 0);
       stroke-width: 2px;
     }
-    /*#popup {
-      position: absolute;
-      visibility: hidden;
-      z-index: 1000;
-      width: 200px;
-      height: 200px;
-      background-color: #eee;
-    }*/
+    #info-box {
+      float: left;
+    }
+    #info-box > h4 {
+      margin: 5px 10px 5px 15px;
+      float: left;
+      font-size: 14px;
+    }
+    #info-box > h6 {
+      float: left;
+      padding: 2px 7px;
+      font-size: 11px;
+      margin: 3px 5px 0 0;
+    }
+    .line_num {
+      float: left;
+      color: white;
+      border-radius: 50%;
+    }
+    #line_1 {background-color: #00498B;}
+    #line_2 {background-color: #009246;}
+    #line_3 {background-color: #F36630;}
+    #line_4 {background-color: #00A2D1;}
+    #line_5 {background-color: #A064A3;}
     #graph-box {
       position: absolute;
       width: 350px;
@@ -151,20 +164,19 @@
 
 
     var drawSubGraph = function(properties) {
+      console.log(properties);
       var station_name = properties.station_name;
       var station_line = properties.line_num;
+      var transfer_line = properties.transfer_line;
+      transfer_line.unshift(station_line)
+
       var data = properties.dates;
       var dataToCompare = properties.previous_data;
 
       var margin = {top: 10, right: 20, bottom: 10, left: 55};
       // if (!document.querySelector('#line'+station_line)) {
       //   // Add a row for the line if there is not yet.
-      //   d3.select('#graph-box')
-      //               .append('div')
-      //               .attr('id', 'line'+station_line)
-      //               .append('div')
-      //               .append('h2')
-      //               .html(station_line+'호선')
+
       // }
       var parseTime = d3.timeParse('%Y%m%d');
       var getDateString = function(ds) {
@@ -199,16 +211,31 @@
 
       var formatTime = d3.timeFormat('%m월%d일');
 
-      var subDiv = d3.select('#graph-box')
-                      .append('div')
-                  .attr('class', 'sub-graph col-md-6 col-xs-12');
+      var subDiv = d3.select('#graph-box');
 
       var subDivWidth = document.getElementById('graph-box').clientWidth - 30;
       var subHeight = document.getElementById('graph-box').clientHeight - 80;
 
 
-      subDiv.append('h4')
+      var infoBox = subDiv.append('div')
+            .attr('id','info-box');
+
+      infoBox.append('h4')
             .text(station_name);
+
+
+      var lineData = infoBox
+            .selectAll('div')
+            .data(transfer_line);
+
+      //lineData.attr('class','line_num');
+
+      lineData.enter().append('h6')
+              .attr('class','line_num')
+            .attr('id',function(d) {return 'line_'+d;})
+            .text(function(d) {
+              return d;
+            })
 
       var subSvg = subDiv
                     .append('svg')
@@ -245,11 +272,6 @@
       subY.domain([subMin*0.9, subMax*1.1]);
 
 
-      // Add the entry valueline path.
-      // subSvg.append('path')
-      //     .data([data])
-      //     .attr('class', 'line'+station_line+ ' entry')
-      //     .attr('d', subEntryValueline);
 
 
       // Add the valueline path.
