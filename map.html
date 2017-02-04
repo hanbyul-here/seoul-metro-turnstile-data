@@ -41,11 +41,11 @@
     #graph-box {
       position: absolute;
       width: 350px;
-      height: 200px;
+      height: 150px;
       bottom: 20px;
-      left: 20px;
+      left: calc(50% - 175px);
       padding: 10px 10px 10px 0;
-      background-color: rgba(150, 150, 150, 0.9);
+      background-color: rgba(180, 180, 180, 0.9);
       z-index: 1000;
     }
     .info {
@@ -71,14 +71,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.js"></script>
   <script>
     // map
+    L.Mapzen.apiKey = 'matrix-5kvnWuh';
     var map = L.Mapzen.map('map-30min',{
-      debugTangram: true,
-      scene: './assets/detailed-scene.yaml',
+      tangramOptions: {
+        scene: './assets/detailed-scene.yaml'
+      },
       minZoom: 14,
       zoomControl: false,
       paddingTopLeft: [0, 300]
     });
-    map.setView([37.5759,126.9768], 15);
+    map.setView([37.5601,126.9794], 14.3);
 
     // add legend for isochrone data
     var legend = L.control({position: 'bottomright'});
@@ -114,7 +116,6 @@
 
 
       var scene = e.tangramLayer.scene;
-      console.log(scene);
 
       // append graphs
       // map.getContainer().append()
@@ -122,29 +123,28 @@
 
 
       // feature edit popup
-      map.getContainer().addEventListener('mousedown', function (event) {
-        var picking = true;
-        var latlng = map.mouseEventToLatLng(event);
+      map.getContainer().addEventListener('touchstart', function(event) {
+        var pixel = { x:event.touches[0].clientX, y: event.touches[0].clientY };
+        scene.getFeatureAt(pixel).then(function(selection) {
+          if(selection.feature) {
+            if (selection.feature.source_name == 'stations') {
+              graphDiv.innerHTML = '';
+              drawSubGraph(selection.feature.properties);
+            }
+          }
+        });
+      })
 
-        //var pixel = map.mouseEventToLayerPoint(event);
+      map.getContainer().addEventListener('mousedown', function (event) {
         var pixel = { x: event.clientX, y: event.clientY };
 
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
-
             if (selection.feature.source_name == 'stations') {
               graphDiv.innerHTML = '';
               drawSubGraph(selection.feature.properties);
-              // popup.style.left = pixel.x + 'px';
-              // popup.style.top = pixel.y + 'px';
-              // popup.style.visibility = 'visible';
-            } else {
-              // popup.style.visibility = 'hidden';
             }
-          } else {
-            // popup.style.visibility = 'hidden';
           }
-
         });
       });
     });
@@ -171,9 +171,6 @@
         var date = parseTime(ds);
         return date;
       }
-
-
-
 
       var aveExit = 0;
       var aveEntry = 0;

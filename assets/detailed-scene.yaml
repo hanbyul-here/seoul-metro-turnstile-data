@@ -86,20 +86,6 @@ layers:
             }
             return size/7500;
           }
-    previous-data:
-      draw:
-        points:
-          centroid: true
-          collide: false
-          color: [1.0, 0.8, 0.0]
-          size: |
-            function () {
-              var size = 0;
-              for (var i = 0; i < feature.previous_data.length;i++) {
-                size += feature.previous_data[i].turnstile_data[0].exits;
-              }
-              return size/7500;
-            }
     station-labels:
       filter: { $zoom: { min: 14} }
       draw:
@@ -110,3 +96,18 @@ layers:
           font:
             fill: white
             size: 12px
+  previous-data:
+    data: { source: stations}
+    draw:
+      points:
+        centroid: true
+        collide: false
+        color: [1.0, 0.8, 0.0]
+        size: |
+          function () {
+            var size = 0;
+            for (var i = 0; i < feature.previous_data.length;i++) {
+              size += feature.previous_data[i].turnstile_data[0].exits;
+            }
+            return size/7500;
+          }
