@@ -81,10 +81,10 @@ layers:
         size: |
           function () {
             var size = 0;
-            for (var i = 0; i < feature.dates.length;i++) {
+            for (var i = 0; i < feature.dates.length-2;i++) {
                 size += feature.dates[i].turnstile_data[0].exits;
             }
-            return size/7500;
+            return Math.sqrt(size/300);
           }
     station-labels:
       filter: { $zoom: { min: 14} }
@@ -109,5 +109,5 @@ layers:
             for (var i = 0; i < feature.previous_data.length;i++) {
               size += feature.previous_data[i].turnstile_data[0].exits;
             }
-            return size/7500;
+            return Math.sqrt(size/300);
           }
