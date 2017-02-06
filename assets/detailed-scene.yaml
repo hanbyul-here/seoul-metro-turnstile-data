@@ -9,6 +9,9 @@ textures:
       # define sprites: [x origin, y origin, width, height]
       train: [410, 0, 36, 36]
 
+global:
+  selected_station: null
+
 styles:
   alpha_polygons:
     base: polygons
@@ -70,6 +73,27 @@ layers:
   #           return size/7000;
   #         }
   #       color: [1.0, 0.8, 0.0]
+  selected-data:
+    data: { source: stations}
+    draw:
+      points:
+        centroid: true
+        collide: false
+        color: [0.8, 0.8, 0.8]
+        size: |
+          function () {
+            console.log(feature.station_name);
+            console.log(global.selected_station)
+            if (global.selected_station == feature.station_name) {
+              var size = 0;
+              for (var i = 0; i < feature.dates.length;i++) {
+                size += feature.dates[i].turnstile_data[0].exits;
+              }
+              return (size/8000 + 10);
+            } else {
+              return 0;
+            }
+          }
   stations:
     data: { source: stations}
     draw:
@@ -81,10 +105,10 @@ layers:
         size: |
           function () {
             var size = 0;
-            for (var i = 0; i < feature.dates.length-2;i++) {
-                size += feature.dates[i].turnstile_data[0].exits;
+            for (var i = 0; i < feature.dates.length;i++) {
+              size += feature.dates[i].turnstile_data[0].exits;
             }
-            return Math.sqrt(size/300);
+            return size/8000;
           }
     station-labels:
       filter: { $zoom: { min: 14} }
@@ -109,5 +133,5 @@ layers:
             for (var i = 0; i < feature.previous_data.length;i++) {
               size += feature.previous_data[i].turnstile_data[0].exits;
             }
-            return Math.sqrt(size/300);
+            return size/8000;
           }

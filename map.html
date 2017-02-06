@@ -17,6 +17,19 @@
       width: 100%;
       height: 100%;
     }
+    .area {
+      fill: rgb(60, 60, 60);
+    }
+    .tooltip {
+      position: absolute;
+      z-index: 1001;
+      font-size: 10px;
+      font-family: sans-serif;
+      background-color: white;
+      color: black;
+      opacity: 0.0;
+      padding: 2px;
+    }
     .line {
       fill: none;
       stroke: rgb(255, 51, 51);
@@ -41,6 +54,9 @@
       font-size: 11px;
       margin: 3px 5px 0 0;
     }
+    .ave {
+      float: left;
+    }
     .line_num {
       float: left;
       color: white;
@@ -51,6 +67,43 @@
     #line_3 {background-color: #F36630;}
     #line_4 {background-color: #00A2D1;}
     #line_5 {background-color: #A064A3;}
+
+    /*#popup {
+      position: absolute;
+      visibility: hidden;
+      z-index: 1000;
+      width: 200px;
+      height: 200px;
+      background-color: #eee;
+    }*/
+    .line-name {
+      float: left;
+      width: 50%;
+      font-size: 18px;
+      display: inline-block;
+    }
+    .other-lines {
+      float: right;
+      width: 50%;
+      padding-top: 10px;
+      display: inline-block;
+    }
+    .other-lines > h3 {
+      display: inline;
+      font-size: 12px;
+      padding: 5px 10px;
+      background-color: #000;
+      border-radius: 50% 50%;
+      color: #fff;
+    }
+
+    .other-lines > h3.line1 { background-color: #00498B; }
+    .other-lines > h3.line2 { background-color: #009246; }
+    .other-lines > h3.line3 { background-color: #F36630; }
+    .other-lines > h3.line4 { background-color: #00A2D1; }
+    .other-lines > h3.line5 { background-color: #A064A3; }
+
+
     #graph-box {
       position: absolute;
       margin-top: 10px;
@@ -81,6 +134,11 @@
         margin-right: 8px;
         opacity: 0.7;
     }
+
+    .grid line {
+      stroke: gray;
+      shape-rendering: crispEdges;
+    }
   </style>
 </head>
 <body>
@@ -93,7 +151,7 @@
     L.Mapzen.apiKey = 'matrix-5kvnWuh';
     var map = L.Mapzen.map('map-30min',{
       tangramOptions: {
-        scene: './assets/detailed-scene.yaml'
+        scene: 'assets/detailed-scene.yaml'
       },
       minZoom: 14,
       zoomControl: false,
@@ -106,7 +164,7 @@
     legend.onAdd = function (map) {
 
       var div = L.DomUtil.create('div', 'info legend'),
-        grades = ['2015년 11, 12월 평균', '2016년'];
+        grades = ['2015년', '2016년'];
         colors = ['rgb(255, 204, 0)', 'rgb(255, 51, 51)'];
         // loop through our density intervals and generate a label with a colored square for each interval
         for (var i = 0; i < grades.length; i++) {
@@ -119,6 +177,7 @@
     };
 
     legend.addTo(map);
+
     L.Mapzen.hash({
       map: map
     })
@@ -137,6 +196,7 @@
       var scene = e.tangramLayer.scene;
 
       // feature edit popup
+
       map.getContainer().addEventListener('touchstart', function(event) {
         var pixel = { x:event.touches[0].clientX, y: event.touches[0].clientY };
         scene.getFeatureAt(pixel).then(function(selection) {
@@ -155,13 +215,17 @@
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
             if (selection.feature.source_name == 'stations') {
-              graphDiv.innerHTML = '';
-              drawSubGraph(selection.feature.properties);
+              scene.config.global.selected_station = selection.feature.properties.station_name;
+              scene.rebuild().then(function () {
+                graphDiv.innerHTML = '';
+                drawSubGraph(selection.feature.properties);
+              })
             }
           }
         });
       });
     });
+
   </script>
 </body>
 </html>
