@@ -5,7 +5,7 @@
   "main": "script/get-stations.js",
   "scripts": {
     "update-data": "cp scripts/turnstile-data/15min/date-based.json data/15min-from-center/total-based-on-date.json; cp scripts/turnstile-data/15min/station-based.json data/15min-from-center/total-based-on-station.json; cp scripts/turnstile-data/30min/date-based.json data/30min-from-center/total-based-on-date.json; cp scripts/turnstile-data/30min/station-based.json data/30min-from-center/total-based-on-station.json  ",
-    "update-example-data":"cp scripts/turnstile-data/15min/date-based.json examples/data/15min-from-center/total-based-on-date.json; cp scripts/turnstile-data/15min/station-based.json examples/data/15min-from-center/total-based-on-station.json; cp scripts/turnstile-data/30min/date-based.json examples/data/30min-from-center/total-based-on-date.json; cp scripts/turnstile-data/30min/station-based.json examples/data/30min-from-center/total-based-on-station.json",
+    "update-example-data": "cp scripts/turnstile-data/15min/date-based.json examples/data/15min-from-center/total-based-on-date.json; cp scripts/turnstile-data/15min/station-based.json examples/data/15min-from-center/total-based-on-station.json; cp scripts/turnstile-data/30min/date-based.json examples/data/30min-from-center/total-based-on-date.json; cp scripts/turnstile-data/30min/station-based.json examples/data/30min-from-center/total-based-on-station.json",
     "get-data": "node scripts/5-get-daily-turnstile.js; node scripts/6-get-final-data.js;",
     "publish-data": "npm run get-data; npm run update-data; npm run update-example-data;",
     "update-gh-pages": "git subtree push --prefix examples origin gh-pages"
@@ -14,19 +14,22 @@
     "name": "Hanbyul Jo",
     "email": "hanbyul@mapzen.com"
   },
-  "contributors": [{
-    "name": "Youngim Jo"
-  },
-  {
-    "name": "Sungjin Nam"
-  }],
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/hanbyul-here/seoul-metro-turnstile-data"
+  "contributors": [
+    {
+      "name": "Youngim Jo"
+    },
+    {
+      "name": "Sungjin Nam"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hanbyul-here/seoul-metro-turnstile-data"
   },
   "license": "MIT",
   "devDependencies": {
     "geojson": "^0.4.0",
+    "geojson-merge": "^0.3.0",
     "jsonfile": "^2.4.0",
     "xmlhttprequest": "^1.8.0"
   }
