@@ -42,6 +42,16 @@
     }
     #info-box {
       float: left;
+      width: 100%;
+    }
+
+    #svg-box {
+      float: left;
+      width: 100%;
+
+    }
+    #svg-box > svg {
+      float: left;
     }
     #info-box > h4 {
       margin: 5px 10px 5px 15px;
@@ -68,14 +78,7 @@
     #line_4 {background-color: #00A2D1;}
     #line_5 {background-color: #A064A3;}
 
-    /*#popup {
-      position: absolute;
-      visibility: hidden;
-      z-index: 1000;
-      width: 200px;
-      height: 200px;
-      background-color: #eee;
-    }*/
+
     .line-name {
       float: left;
       width: 50%;
@@ -111,7 +114,7 @@
       height: 150px;
       bottom: 20px;
       left: calc(50% - 175px);
-      padding: 5px 10px 5px 0;
+      padding: 5px 0 5px 0;
       background-color: rgba(220, 220, 220, 0.9);
       z-index: 1000;
     }
@@ -123,6 +126,7 @@
       background-color: #fff;
       padding: 3px;
     }
+
     .legend {
     line-height: 18px;
     color: #555;
@@ -148,6 +152,7 @@
   <script src="./js/subgraph.js"></script>
   <script>
     // map
+    var first = true;
     L.Mapzen.apiKey = 'matrix-5kvnWuh';
     var map = L.Mapzen.map('map-30min',{
       tangramOptions: {
@@ -176,20 +181,15 @@
         return div;
     };
 
-    legend.addTo(map);
+    // legend.addTo(map);
 
     L.Mapzen.hash({
       map: map
     })
 
     map.on('tangramloaded', function(e) {
-
-      var popup = document.createElement('div');
-      popup.setAttribute('id', 'popup');
-      map.getContainer().append(popup);
-
       var graphDiv = document.createElement('div');
-      graphDiv.setAttribute('id','graph-box');
+      graphDiv.setAttribute('id','graph-box')
       map.getContainer().append(graphDiv);
 
 
@@ -211,14 +211,18 @@
 
       map.getContainer().addEventListener('mousedown', function (event) {
         var pixel = { x: event.clientX, y: event.clientY };
-
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
             if (selection.feature.source_name == 'stations') {
               scene.config.global.selected_station = selection.feature.properties.station_name;
+              drawSubGraph.prepareData(selection.feature.properties);
               scene.rebuild().then(function () {
-                graphDiv.innerHTML = '';
-                drawSubGraph(selection.feature.properties);
+                // graphDiv.innerHTML = '';
+                if(!first) drawSubGraph.updateYAxis();
+                else {
+                  drawSubGraph.createGraph();
+                  first = false;
+                }
               })
             }
           }
