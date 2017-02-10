@@ -32,8 +32,8 @@ sources:
 
   stations:
     type: GeoJSON
-    url: './lets-see.geojson'
-    scripts: ['./processAttribute.js']
+    url: './main-data.geojson'
+    scripts: ['./globalAsset.js']
 
 layers:
   isochrone:
@@ -58,20 +58,6 @@ layers:
         outline:
           color: gray
           width: 1px
-  # previous_data:
-  #   data: { source: previous_data}
-  #   draw:
-  #     points:
-  #       order: 3500
-  #       size: |
-  #         function () {
-  #           var size = 0;
-  #           for (var i = 0; i < feature.dates.length;i++) {
-  #             size += feature.dates[i].turnstile_data[0].exits;
-  #           }
-  #           return size/7000;
-  #         }
-  #       color: [1.0, 0.8, 0.0]
   selected-data:
     data: { source: stations}
     draw:
@@ -83,24 +69,12 @@ layers:
           function () {
             if (global.selected_station) {
               if (global.selected_station == feature.station_name) {
-                var size = 0;
-                  var previousSize = 0;
-                for (var i = 0; i < feature.dates.length;i++) {
-                  size += feature.dates[i].turnstile_data[0].exits;
-                  previousSize += feature.previous_data[i].turnstile_data[0].exits;
-                }
-                return (Math.sqrt((size-previousSize)/50)+ 15);
+                return (globalAsset.getSizeByProperty(feature)+10);
               } else {
                 return 0;
               }
-              } else {
-                var size = 0;
-                var previousSize = 0;
-                for (var i = 0; i < feature.dates.length;i++) {
-                  size += feature.dates[i].turnstile_data[0].exits;
-                  previousSize += feature.previous_data[i].turnstile_data[0].exits;
-                }
-                return (Math.sqrt((size-previousSize)/50)+ 10);
+            } else {
+              return (globalAsset.getSizeByProperty(feature)+10);
             }
           }
   stations:
@@ -113,7 +87,7 @@ layers:
         color: rgb(239, 59, 44)
         size: |
           function () {
-            return getSizeByProperty(feature);
+            return globalAsset.getSizeByProperty(feature);
           }
         text:
           collide: false
@@ -121,7 +95,7 @@ layers:
           anchor: bottom
           text_source: |
             function () {
-              if (global.lng == 'en') return feature.station_name_eng
+              if (globalAsset.lng == 'en') return feature.station_name_en;
               else return feature.station_name;
             }
           font:

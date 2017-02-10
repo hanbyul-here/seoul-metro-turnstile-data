@@ -12,12 +12,10 @@
   <div id="map-30min"></div>
 
   <script src="https://mapzen.com/js/mapzen.min.js"></script>
-  <script src="./assets/lang.js"></script>
+  <script src="./assets/globalAsset.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.js"></script>
-  <script src="./assets/processAttribute.js"></script>
   <script src="./js/subgraph.js"></script>
   <script>
-    // map
 
     L.Mapzen.apiKey = 'matrix-5kvnWuh';
     var map = L.Mapzen.map('map-30min',{
@@ -30,9 +28,6 @@
     });
 
     map.setView([37.5601,126.9794], 14.3);
-
-    // Let's load total data for initial view and legend
-
 
     // add legend
     var legend = L.control({position: 'bottomleft'});
@@ -65,8 +60,8 @@
         var minimumDiv = L.DomUtil.create('div', 'circle minimum');
 
         selectedDiv.style.backgroundColor = 'gray';
-        maxRad = getSizeByProperty(data.max.properties);//getSizeByProperty(78486);
-        minRad = getSizeByProperty(data.min.properties);//getSizeByProperty(891);
+        maxRad = globalAsset.getSizeByProperty(data.max.properties);//globalAsset.getSizeByProperty(78486);
+        minRad = globalAsset.getSizeByProperty(data.min.properties);//globalAsset.getSizeByProperty(891);
 
         maximumDiv.style.width = maxRad +'px';
         maximumDiv.style.height = maxRad+'px';
@@ -85,13 +80,13 @@
         selectedLabel = L.DomUtil.create('div', 'selected label');
 
         maxLabel.style.left = maxRad/2+ 'px';
-        maxLabel.style.bottom = maxRad-21+ 'px';
+        maxLabel.style.bottom = maxRad+ 'px';
         minLabel.style.left = maxRad/2+ 'px';
         minLabel.style.bottom = minRad-21+ 'px';
         selectedLabel.style.width = '0';
 
-        maxLabel.innerHTML = words['max'][globalLng] + ' : ' + formatNumber(data.max.total.exits2016 - data.max.total.exits2015);
-        minLabel.innerHTML =  words['min'][globalLng] + ' : ' + formatNumber(data.min.total.exits2016 - data.min.total.exits2015);
+        maxLabel.innerHTML = globalAsset.words['max'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(data.max.properties));
+        minLabel.innerHTML =  globalAsset.words['min'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(data.min.properties));
         //selectedLabel.style.left = maxRad/2+ 'px';
         //selectedLabel.style.top = maxRad/2+ 'px';
 
@@ -132,7 +127,6 @@
 
     map.on('tangramloaded', function(e) {
       var scene = e.tangramLayer.scene;
-      scene.config.global.lng = globalLng;
 
       // feature edit popup
       map.getContainer().addEventListener('touchstart', function(event) {
@@ -140,8 +134,12 @@
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
             if (selection.feature.source_name == 'stations') {
-
-              Graph(selection.feature.properties);
+              scene.config.global.selected_station = selection.feature.properties.station_name;
+              scene.rebuild().then(function () {
+                // graphDiv.innerHTML = '';
+                Graph.prepareData(selection.feature.properties);
+                Graph.updateGraph();
+              })
             }
           }
         });
@@ -153,18 +151,19 @@
           if(selection.feature) {
             if (selection.feature.source_name == 'stations') {
               scene.config.global.selected_station = selection.feature.properties.station_name;
-              selectedDiv.style.width = getSizeByProperty(selection.feature.properties) +'px';
-              selectedDiv.style.height = getSizeByProperty(selection.feature.properties) +'px';
-              selectedDiv.style.left = (maxRad -  getSizeByProperty(selection.feature.properties))/2+'px';
 
-              selectedLabel.style.width = '60%';
+              selectedDiv.style.width = globalAsset.getSizeByProperty(selection.feature.properties) +'px';
+              selectedDiv.style.height = globalAsset.getSizeByProperty(selection.feature.properties) +'px';
+              selectedDiv.style.left = (maxRad -  globalAsset.getSizeByProperty(selection.feature.properties))/2+'px';
+              selectedLabel.style.width = '70%';
               selectedLabel.style.left = (maxRad/2)+'px';
-              selectedLabel.style.bottom = (getSizeByProperty(selection.feature.properties)-21)+ 'px';
+              selectedLabel.innerHTML =  globalAsset.words['gap'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(selection.feature.properties));
+              selectedLabel.style.bottom = (globalAsset.getSizeByProperty(selection.feature.properties)-21)+ 'px';
 
               scene.rebuild().then(function () {
                 // graphDiv.innerHTML = '';
                 Graph.prepareData(selection.feature.properties);
-                Graph.updateYAxis();
+                Graph.updateGraph();
               })
             }
           }
