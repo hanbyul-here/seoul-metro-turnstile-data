@@ -25,14 +25,14 @@ styles:
 sources:
   isochrone:
     type: GeoJSON
-    url: './isochrone.json'
+    url: '../data/isochrone.json'
   subway_line:
     type: GeoJSON
     url: '../data/subway-line-shape.geojson'
 
   stations:
     type: GeoJSON
-    url: './main-data.geojson'
+    url: '../data/data-for-map.geojson'
     scripts: ['./globalAsset.js']
 
 layers:
