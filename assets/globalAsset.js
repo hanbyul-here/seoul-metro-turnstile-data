@@ -11,11 +11,11 @@ var globalAsset = {
     },
     max: {
       kr: '최대 평균증가량',
-      en: 'max increment'
+      en: 'max increase'
     },
     min: {
       kr:'최소 평균증가량',
-      en: 'min increment'
+      en: 'min increase'
     },
     ave: {
       kr:'평균',
@@ -31,7 +31,7 @@ var globalAsset = {
     },
     gap: {
       kr: '증가량',
-      en: 'increment'
+      en: 'increase'
     },
     week: {
       kr: '째주',
