@@ -9,10 +9,6 @@ textures:
       # define sprites: [x origin, y origin, width, height]
       train: [410, 0, 36, 36]
 
-global:
-  selected_station: null
-  lng: 'en'
-
 styles:
   alpha_polygons:
     base: polygons
@@ -25,16 +21,14 @@ styles:
 sources:
   isochrone:
     type: GeoJSON
-    url: '../data/isochrone.json'
+    url: './isochrone.json'
   subway_line:
     type: GeoJSON
     url: '../data/subway-line-shape.geojson'
 
   stations:
     type: GeoJSON
-    url: '../data/data-for-map.geojson'
-    scripts: ['./globalAsset.js']
-
+    url: './lets-see.geojson'
 layers:
   isochrone:
     data: { source: isochrone}
@@ -58,25 +52,6 @@ layers:
         outline:
           color: gray
           width: 1px
-  selected-data:
-    data: { source: stations}
-    draw:
-      points:
-        centroid: true
-        collide: false
-        color: gray
-        size: |
-          function () {
-            if (global.selected_station) {
-              if (global.selected_station == feature.station_name) {
-                return (globalAsset.getSizeByProperty(feature)+10);
-              } else {
-                return 0;
-              }
-            } else {
-              return (globalAsset.getSizeByProperty(feature)+10);
-            }
-          }
   stations:
     data: { source: stations}
     draw:
@@ -84,21 +59,36 @@ layers:
         interactive: true
         centroid: true
         collide: false
-        color: rgb(239, 59, 44)
+        color: [1.0, 0.2, 0.2]
         size: |
           function () {
-            return globalAsset.getSizeByProperty(feature);
+            var size = 0;
+            for (var i = 0; i < feature.dates.length;i++) {
+                size += feature.dates[i].turnstile_data[0].exits;
+            }
+            return size/7500;
           }
+    previous-data:
+      draw:
+        points:
+          centroid: true
+          collide: false
+          color: [1.0, 0.8, 0.0]
+          size: |
+            function () {
+              var size = 0;
+              for (var i = 0; i < feature.previous_data.length;i++) {
+                size += feature.previous_data[i].turnstile_data[0].exits;
+              }
+              return size/7500;
+            }
+    station-labels:
+      filter: { $zoom: { min: 14} }
+      draw:
         text:
           collide: false
-          centroid: true
-          anchor: bottom
-          text_source: |
-            function () {
-              if (globalAsset.lng == 'en') return feature.station_name_en;
-              else return feature.station_name;
-            }
+          offset: [0px, 15px]
+          text_source: station_name
           font:
-            stroke: {color: gray, width: 5 }
             fill: white
             size: 12px
