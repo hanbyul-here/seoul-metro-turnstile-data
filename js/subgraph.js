@@ -1,4 +1,4 @@
-var drawSubGraph = (function() {
+var Graph = (function() {
 
   var station_name;
   var transfer_line;
@@ -6,18 +6,32 @@ var drawSubGraph = (function() {
   var dataToCompare;
   var reformedDataToCompare;
   var ave;
+  var datesForX = [];
   var previousAve;
 
 
-  var formatTime = d3.timeFormat('%m월 %d일');
+  var formatTime = function(time) {
+    var dayTime = d3.timeFormat('%m %d')(time);
+    var month = dayTime.split(' ')[0];
+    var day = dayTime.split(' ')[1];
+    var week = Math.ceil(day /7);
+
+    if (globalLng == 'en') return words['week'][globalLng] + week + ' of ' +  month + words['month'][globalLng];
+    else return month + words['month'][globalLng] + ' ' + week + words['week'][globalLng] ;
+  };
   var formatNumber = d3.format(",");
   var minMaxFormat = d3.format(".3r");
   var subDiv;
   var subDivWidth;
+  var subHeight;
   var svgBox;
   var subSvg;
-  var subY;
+  var subX, subY;
   var subValueline
+
+  var tooltipDiv = d3.select('body').append('div')
+    .attr('class', 'tooltip')
+    .style('opacity', 0);
 
 
   var parseTime = d3.timeParse('%Y%m%d');
@@ -28,20 +42,22 @@ var drawSubGraph = (function() {
   }
 
   function prepareData(properties) {
+    subDiv = d3.select('#graph-box');
 
     ave = 0;
     previousAve = 0;
 
     reformedDataToCompare = [];
 
-    station_name = properties.station_name;
+    station_name = properties.station_name || words['totalTitle'][globalLng];
     transfer_line = properties.transfer_line;
-    transfer_line.unshift(properties.line_num)
+    if (transfer_line) transfer_line.unshift(properties.line_num)
 
     data = properties.dates;
     dataToCompare = properties.previous_data;
     data.reverse();
     data.forEach(function(d) {
+      datesForX.push(getDateString(d.date));
       d.date = getDateString(d.date);
       ave += d.turnstile_data[0].exits;
       reformedDataToCompare.push({
@@ -62,28 +78,21 @@ var drawSubGraph = (function() {
     }
     previousAve /= reformedDataToCompare.length;
     previousAve = Math.floor(previousAve);
-
-    prepareDOM();
   }
 
-  var prepareDOM = function () {
-    subDiv = d3.select('#graph-box');
-  }
-
-
-  var margin = { top: 10, right: 20, bottom: 10, left: 40};
+  var margin = { top: 10, right: 20, bottom: 10, left: 47};
   var barSvg;
   var barWidth;
   var barHeight;
 
   function drawBarSVG() {
     barWidth = 100;
-    barHeight =  120 -margin.top - margin.bottom;
+    barHeight =  subHeight;
 
     barSvg = svgBox
               .append('svg')
               .attr('width', barWidth)
-              .attr('height', barHeight);
+              .attr('height', barHeight)
 
     var barG = barSvg.append('g')
           .attr('class', 'bar-graph');
@@ -95,22 +104,87 @@ var drawSubGraph = (function() {
           .attr('transform', 'translate(10,'+ subY(previousAve)+')');
 
     barG.append('text')
-          .attr('x', 10)
+          .attr('x', 25 - getBarGraphLabelXPos(previousAve))
           .attr('y', subY(previousAve))
           .text(formatNumber(previousAve))
 
 
     barG.append('rect')
-          .attr('fill', 'rgba(255, 51, 51, 0.7)')
+          .attr('fill', getMainColor())
           .attr('width', 30)
           .attr('height', barHeight-subY(ave))
           .attr('transform', 'translate(50,'+ subY(ave) +')');
 
     barG.append('text')
-          .attr('x', 40)
+          .attr('x', 65 - getBarGraphLabelXPos(ave))
           .attr('y', subY(ave))
           .text(formatNumber(ave))
 
+  }
+
+  function getBarGraphLabelXPos(number) {
+    var digits = (number+'').length;
+    if (digits > 6) return 27;
+    else if (digits > 5) return 22;
+    else return 17;
+  }
+
+  function drawLegend() {
+    var legendSvg = subDiv.append('svg')
+                    .attr('style','position:absolute;right:0;width:'+barWidth);
+
+    legendSvg.append('rect')
+          .attr('fill',getMainColor())
+          .attr('width', 15)
+          .attr('height', 15)
+
+
+    legendSvg.append('text')
+          .attr('x', 21)
+          .attr('y', 12)
+          .text('2016');
+
+
+    legendSvg.append('g')
+          .append('rect')
+          .attr('fill', 'rgb(255, 204, 0')
+          .attr('width', 15)
+          .attr('height', 15)
+          .attr('transform', 'translate(0, 20)');
+
+    legendSvg.append('text')
+          .attr('x', 21)
+          .attr('y', 32)
+          .text('2015');
+
+    legendSvg.append('text')
+          .attr('x', barWidth - 80)
+          .attr('y', barHeight + 45)
+          .text(words['ave'][globalLng]);
+
+  }
+
+  function drawDOM() {
+    var infoBox = subDiv.append('div')
+          .attr('id','info-box');
+
+    infoBox.append('h4')
+          .text(station_name);
+
+
+    if (transfer_line) {
+      var lineData = infoBox
+            .selectAll('div')
+            .data(transfer_line);
+
+
+      lineData.enter().append('h6')
+              .attr('class','line_num')
+            .attr('id',function(d) {return 'line_'+d;})
+            .text(function(d) {
+              return d;
+            })
+    }
   }
 
   function drawLineSVG() {
@@ -120,7 +194,7 @@ var drawSubGraph = (function() {
 
 
     subDivWidth = document.getElementById('graph-box').clientWidth - margin.left - margin.right - 100;
-    var subHeight = 120 - margin.top - margin.bottom;
+    subHeight = 120 - margin.top - margin.bottom;
 
     subSvg = svgBox
                   .append('svg')
@@ -130,9 +204,10 @@ var drawSubGraph = (function() {
                   .attr('transform',
                         'translate(' + margin.left + ',0)');
 
-    var subX = d3.scaleTime().range([0, subDivWidth]);
-    subY = d3.scaleLinear().range([subHeight, 0]);
+    subX = d3.scaleTime().rangeRound([0, subDivWidth]);
+    subY = d3.scaleLinear().rangeRound([subHeight, 0]);
 
+    // mouse interaction
 
     // define the line
     subValueline = d3.line()
@@ -141,9 +216,8 @@ var drawSubGraph = (function() {
 
     var subMin = minMaxFormat(Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits })));
     var subMax = minMaxFormat(Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits})));
-    console.log(subMin);
 
-    subX.domain(d3.extent(data, function(d) { return d.date; }));
+    subX.domain([data[0].date, data[data.length-1].date]);
     subY.domain([subMin, subMax*1.05]);
 
       // Add the valueline path.
@@ -159,69 +233,106 @@ var drawSubGraph = (function() {
         .attr('d', subValueline);
 
     subSvg.append('g')
-        .attr('transform', 'translate(0,' + (subHeight) + ')')
+        .attr('transform', 'translate(0,' + subHeight + ')')
         .attr('class','ticktick')
-        .call(d3.axisBottom(subX).ticks(data.length).tickFormat(function(d, i) {
-          if ( i%2 ==0) {
-            return formatTime(d);
-          }
-          else return '';}))
+        .call(
+          d3.axisBottom(subX)
+          .tickValues(datesForX)
+          .tickPadding(5)
+          .tickSize(-subHeight)
+          .tickFormat(function(d, i) {
+            if ( i%2 ==0) {
+              return formatTime(d);
+            }
+            else return '';}))
 
     subSvg.append('g')
         .attr('class', 'yaxis')
         .call(d3.axisLeft(subY)
                 .tickSize(-subDivWidth)
+                .tickPadding([0])
                 .ticks(5));
 
-      var div = d3.select('body').append('div')
-        .attr('class', 'tooltip')
-        .style('opacity', 0);
-
     // Add Scatter plot points and tooltip
-    // subSvg.selectAll('dot')
-    //   .data(data)
-    //   .enter().append('svg:image')
-    //   .attr('width', 10)
-    //   .attr('height', 10)
-    //   .attr('xlink:href','./assets/dot.png')
-    //   .attr('x', function(d, i) {
-    //     return subX(d.date)-5})
-    //   .attr('y', function(d, i) {
-    //     return subY(d.turnstile_data[0].exits)-5})
-    // .on('click',function(d, i) {
-    //   div.transition()
-    //       .duration(200)
-    //       .style('opacity', .9);
-    //   div .html(
-    //         formatTime(d.date) + '<br/>'  +
-    //         d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-    //         d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits)
-    //         )
-    //       .style('left', (d3.event.pageX - 40) + 'px')
-    //       .style('top', (d3.event.pageY - 35) + 'px');
-    // })
-    // .on('mouseover', function(d, i) {
-    //   div.transition()
-    //       .duration(200)
-    //       .style('opacity', .9);
-    //   div .html(formatTime(d.date) + '<br/>'  +
-    //         d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-    //         d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits))
-    //       .style('left', (d3.event.pageX) + 'px')
-    //       .style('top', (d3.event.pageY - 28) + 'px');
-    // })
-    // .on('mouseout', function(d) {
-    //     div.transition()
-    //         .duration(500)
-    //         .style('opacity', 0);
-    // });
+    subSvg.selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('class', 'circledot')
+      .attr('r', 7)
+      .attr('fill', getMainColor())
+      .attr('cx', function(d, i) {
+        return subX(d.date)})
+      .attr('cy', function(d, i) {
+        return subY(d.turnstile_data[0].exits)})
+    .on('click',function(d, i) {
+      tooltipDiv.transition()
+          .duration(200)
+          .style('opacity', .9);
+      tooltipDiv .html(
+            formatTime(d.date) + '<br/>'  +
+            d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
+            d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits)
+            )
+          .style('left', (d3.event.pageX) + 10 + 'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+
+    var val = d3.line()
+        .x(function(d) { return subX(d.date); })
+        .y(function(d) { return subY(d.turnstile_data[0].exits); });
+
+    var zeroVal = d3.line()
+        .x(function(d) { return subX(d.date); })
+        .y(function(d) { return 0});
+
+      subSvg.append('path')
+          .attr('class', 'tooltip-line')
+          .attr('d', [val, zeroVal]);
+
+    })
+    .on('mouseover', function(d, i) {
+      tooltipDiv.transition()
+          .duration(200)
+          .style('opacity', .9);
+      tooltipDiv .html(formatTime(d.date) + '<br/>'  +
+            d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
+            d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits))
+          .style('left', (d3.event.pageX) + 10 +'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+    })
+    .on('mouseout', function(d) {
+        tooltipDiv.transition()
+            .duration(500)
+            .style('opacity', 0);
+    });
   }
 
+
+  function updateDOM() {
+    var infoBox = subDiv.select('#info-box');
+
+    infoBox.select('h4')
+        .text(station_name);
+
+    infoBox.selectAll('h6').remove();
+
+    var lineData = infoBox
+          .selectAll('div')
+          .data(transfer_line);
+
+
+    lineData.enter().append('h6')
+          .attr('class','line_num')
+          .attr('id',function(d) {return 'line_'+d;})
+          .text(function(d) {
+            return d;
+          })
+  }
 
   function updateYAxis() {
     var subMin = Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits }));
     var subMax = Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits}));
-    var middle = (subMin + subMax)/2;
+    // var middle = (subMin + subMax)/2;
 
     subY.domain([subMin, subMax*1.05]);
     subDiv.select('.yaxis')
@@ -231,6 +342,51 @@ var drawSubGraph = (function() {
                 .ticks(5));
     updateLineGraph();
     updateBarGraph();
+    updateTipDots();
+    updateDOM();
+  }
+
+  function updateTipDots() {
+    subSvg.selectAll('circle').remove();
+
+    subSvg.selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('class', 'circledot')
+      .attr('r', 7)
+      .attr('fill', getMainColor())
+      .attr('cx', function(d, i) {
+        return subX(d.date)})
+      .attr('cy', function(d, i) {
+        return subY(d.turnstile_data[0].exits)})
+    .on('click',function(d, i) {
+      tooltipDiv.transition()
+          .duration(200)
+          .style('opacity', .9);
+      tooltipDiv .html(
+            formatTime(d.date) + '<br/>'  +
+            d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
+            d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits)
+            )
+          .style('left', (d3.event.pageX) + 10 + 'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+    })
+    .on('mouseover', function(d, i) {
+      tooltipDiv.transition()
+          .duration(200)
+          .style('opacity', .9);
+      tooltipDiv .html(formatTime(d.date) + '<br/>'  +
+            d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
+            d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits))
+          .style('left', (d3.event.pageX) + 10 +'px')
+          .style('top', (d3.event.pageY - 28) + 'px');
+    })
+    .on('mouseout', function(d) {
+        tooltipDiv.transition()
+            .duration(500)
+            .style('opacity', 0);
+    });
   }
 
   function updateLineGraph() {
@@ -261,7 +417,7 @@ var drawSubGraph = (function() {
           .attr('transform', 'translate(10,'+ subY(previousAve)+')');
 
     barG.append('text')
-          .attr('x', 10)
+          .attr('x', 25 - getBarGraphLabelXPos(ave))
           .attr('y', subY(previousAve))
           .text(formatNumber(previousAve))
 
@@ -273,38 +429,16 @@ var drawSubGraph = (function() {
           .attr('transform', 'translate(50,'+ subY(ave) +')');
 
     barG.append('text')
-          .attr('x', 40)
+          .attr('x', 65 - getBarGraphLabelXPos(ave))
           .attr('y', subY(ave))
           .text(formatNumber(ave))
   }
 
-
-  function drawDOM() {
-
-    var infoBox = subDiv.append('div')
-          .attr('id','info-box');
-
-    infoBox.append('h4')
-          .text(station_name);
-
-
-    var lineData = infoBox
-          .selectAll('div')
-          .data(transfer_line);
-
-
-    lineData.enter().append('h6')
-            .attr('class','line_num')
-          .attr('id',function(d) {return 'line_'+d;})
-          .text(function(d) {
-            return d;
-          })
-
-  }
   var createGraph = function () {
     drawDOM();
     drawLineSVG();
     drawBarSVG();
+    drawLegend();
   }
 
   return {
