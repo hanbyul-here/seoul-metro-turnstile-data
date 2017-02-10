@@ -11,13 +11,19 @@ var Graph = (function() {
 
 
   var formatTime = function(time) {
-    var dayTime = d3.timeFormat('%m %d')(time);
-    var month = dayTime.split(' ')[0];
-    var day = dayTime.split(' ')[1];
-    var week = Math.ceil(day /7);
-
-    if (globalLng == 'en') return words['week'][globalLng] + week + ' of ' +  month + words['month'][globalLng];
-    else return month + words['month'][globalLng] + ' ' + week + words['week'][globalLng] ;
+    if (globalAsset.lng == 'en') {
+      var dayTime = d3.timeFormat('%b %d')(time);
+      var month = dayTime.split(' ')[0];
+      var day = dayTime.split(' ')[1];
+      var week = Math.ceil(day /7);
+      return globalAsset.words['week'][globalAsset.lng] + week + ' of ' +  month + globalAsset.words['month'][globalAsset.lng];
+    } else {
+      var dayTime = d3.timeFormat('%m %d')(time);
+      var month = dayTime.split(' ')[0];
+      var day = dayTime.split(' ')[1];
+      var week = Math.ceil(day /7);
+      return month + globalAsset.words['month'][globalAsset.lng] + ' ' + week + globalAsset.words['week'][globalAsset.lng] ;
+    }
   };
   var formatNumber = d3.format(",");
   var minMaxFormat = d3.format(".3r");
@@ -49,7 +55,9 @@ var Graph = (function() {
 
     reformedDataToCompare = [];
 
-    station_name = properties.station_name || words['totalTitle'][globalLng];
+    if (globalAsset.lng =='en') station_name = properties.station_name_en || globalAsset.words['totalTitle'][globalAsset.lng];
+    else station_name = properties.station_name || globalAsset.words['totalTitle'][globalAsset.lng];
+
     transfer_line = properties.transfer_line;
     if (transfer_line) transfer_line.unshift(properties.line_num)
 
@@ -110,7 +118,7 @@ var Graph = (function() {
 
 
     barG.append('rect')
-          .attr('fill', getMainColor())
+          .attr('fill', globalAsset.subMainColor)
           .attr('width', 30)
           .attr('height', barHeight-subY(ave))
           .attr('transform', 'translate(50,'+ subY(ave) +')');
@@ -134,13 +142,14 @@ var Graph = (function() {
                     .attr('style','position:absolute;right:0;width:'+barWidth);
 
     legendSvg.append('rect')
-          .attr('fill',getMainColor())
+          .attr('fill',globalAsset.subMainColor)
           .attr('width', 15)
           .attr('height', 15)
+          .attr('transform', 'translate(10, 0)');
 
 
     legendSvg.append('text')
-          .attr('x', 21)
+          .attr('x', 31)
           .attr('y', 12)
           .text('2016');
 
@@ -150,17 +159,17 @@ var Graph = (function() {
           .attr('fill', 'rgb(255, 204, 0')
           .attr('width', 15)
           .attr('height', 15)
-          .attr('transform', 'translate(0, 20)');
+          .attr('transform', 'translate(10, 20)');
 
     legendSvg.append('text')
-          .attr('x', 21)
+          .attr('x', 31)
           .attr('y', 32)
           .text('2015');
 
     legendSvg.append('text')
           .attr('x', barWidth - 80)
           .attr('y', barHeight + 45)
-          .text(words['ave'][globalLng]);
+          .text(globalAsset.words['ave'][globalAsset.lng]);
 
   }
 
@@ -259,8 +268,8 @@ var Graph = (function() {
       .enter()
       .append('circle')
       .attr('class', 'circledot')
-      .attr('r', 7)
-      .attr('fill', getMainColor())
+      .attr('r', 6)
+      .attr('fill', globalAsset.subMainColor)
       .attr('cx', function(d, i) {
         return subX(d.date)})
       .attr('cy', function(d, i) {
@@ -269,11 +278,7 @@ var Graph = (function() {
       tooltipDiv.transition()
           .duration(200)
           .style('opacity', .9);
-      tooltipDiv .html(
-            formatTime(d.date) + '<br/>'  +
-            d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-            d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits)
-            )
+      tooltipDiv.html(getTooltipHTML(d, i))
           .style('left', (d3.event.pageX) + 10 + 'px')
           .style('top', (d3.event.pageY - 28) + 'px');
 
@@ -294,17 +299,20 @@ var Graph = (function() {
       tooltipDiv.transition()
           .duration(200)
           .style('opacity', .9);
-      tooltipDiv .html(formatTime(d.date) + '<br/>'  +
-            d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-            d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits))
-          .style('left', (d3.event.pageX) + 10 +'px')
-          .style('top', (d3.event.pageY - 28) + 'px');
+      tooltipDiv.html(getTooltipHTML(d, i));
     })
     .on('mouseout', function(d) {
         tooltipDiv.transition()
             .duration(500)
             .style('opacity', 0);
     });
+  }
+
+  function getTooltipHTML(d, i) {
+    return '<h6>' +formatTime(d.date) + '</h6>'  +
+            '2015 : ' + d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
+            '2016 : ' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '<br/>'  +
+            globalAsset.words.gap[globalAsset.lng] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
   }
 
 
@@ -340,10 +348,6 @@ var Graph = (function() {
           .call(d3.axisLeft(subY)
                 .tickSize(-subDivWidth)
                 .ticks(5));
-    updateLineGraph();
-    updateBarGraph();
-    updateTipDots();
-    updateDOM();
   }
 
   function updateTipDots() {
@@ -354,8 +358,8 @@ var Graph = (function() {
       .enter()
       .append('circle')
       .attr('class', 'circledot')
-      .attr('r', 7)
-      .attr('fill', getMainColor())
+      .attr('r', 6)
+      .attr('fill', globalAsset.subMainColor)
       .attr('cx', function(d, i) {
         return subX(d.date)})
       .attr('cy', function(d, i) {
@@ -364,23 +368,17 @@ var Graph = (function() {
       tooltipDiv.transition()
           .duration(200)
           .style('opacity', .9);
-      tooltipDiv .html(
-            formatTime(d.date) + '<br/>'  +
-            d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-            d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits)
-            )
-          .style('left', (d3.event.pageX) + 10 + 'px')
-          .style('top', (d3.event.pageY - 28) + 'px');
+      tooltipDiv.html(getTooltipHTML(d, i))
+      .style('left', (d3.event.pageX) + 10 + 'px')
+      .style('top', (d3.event.pageY - 28) + 'px');
     })
     .on('mouseover', function(d, i) {
       tooltipDiv.transition()
           .duration(200)
           .style('opacity', .9);
-      tooltipDiv .html(formatTime(d.date) + '<br/>'  +
-            d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-            d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits))
-          .style('left', (d3.event.pageX) + 10 +'px')
-          .style('top', (d3.event.pageY - 28) + 'px');
+      tooltipDiv .html(getTooltipHTML(d, i))
+      .style('left', (d3.event.pageX) + 10 +'px')
+      .style('top', (d3.event.pageY - 28) + 'px');
     })
     .on('mouseout', function(d) {
         tooltipDiv.transition()
@@ -423,7 +421,7 @@ var Graph = (function() {
 
 
     barG.append('rect')
-          .attr('fill', 'rgba(255, 51, 51, 0.7)')
+          .attr('fill', globalAsset.subMainColor)
           .attr('width', 30)
           .attr('height', barHeight-subY(ave))
           .attr('transform', 'translate(50,'+ subY(ave) +')');
@@ -440,10 +438,17 @@ var Graph = (function() {
     drawBarSVG();
     drawLegend();
   }
+  var updateGraph = function () {
+    updateYAxis();
+    updateLineGraph();
+    updateBarGraph();
+    updateTipDots();
+    updateDOM();
+  }
 
   return {
     prepareData: prepareData,
     createGraph: createGraph,
-    updateYAxis: updateYAxis
+    updateGraph: updateGraph
   }
 })()
