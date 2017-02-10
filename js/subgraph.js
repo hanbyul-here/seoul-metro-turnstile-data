@@ -279,7 +279,7 @@ var Graph = (function() {
           .duration(200)
           .style('opacity', .9);
       tooltipDiv.html(getTooltipHTML(d, i))
-          .style('left', (d3.event.pageX) + 10 + 'px')
+          .style('left', (d3.event.pageX) + 15 + 'px')
           .style('top', (d3.event.pageY - 28) + 'px');
 
     var val = d3.line()
@@ -299,7 +299,10 @@ var Graph = (function() {
       tooltipDiv.transition()
           .duration(200)
           .style('opacity', .9);
-      tooltipDiv.html(getTooltipHTML(d, i));
+      tooltipDiv.html(getTooltipHTML(d, i))
+                .style('left', (d3.event.pageX) + 15 + 'px')
+                .style('top', (d3.event.pageY - 28) + 'px');
+
     })
     .on('mouseout', function(d) {
         tooltipDiv.transition()
