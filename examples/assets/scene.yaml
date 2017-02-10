@@ -70,4 +70,7 @@ layers:
           function() {
             return feature.line_color
           }
-        width: 3px
+        width: 5px
+        outline:
+          color: gray
+          width: 1px

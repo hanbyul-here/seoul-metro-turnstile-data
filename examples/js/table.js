@@ -1,17 +1,4 @@
-d3.json('./data/15min-from-center/total-based-on-station.json', function (err, data) {
-
-var tData = trimData(data);
-  d3.select('#table-2016-15min')
-  .selectAll("table")
-    .data([tData])
-    .enter().append("table")
-    .attr('class', 'table table-bordered')
-    .call(recurse);
-
-});
-
-
-d3.json('./data/30min-from-center/total-based-on-station.json', function (err, data) {
+d3.json('./data/data-for-table.json', function (err, data) {
 
   var tData = trimData(data);
   d3.select('#table-2016-30min')

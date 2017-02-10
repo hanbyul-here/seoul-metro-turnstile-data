@@ -6,101 +6,122 @@
   <title>서울시 지하철역별 이용객 데이터</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
-  <style>
-    html, body {
-      width: 100%;
-      height: 100%;
-      padding: 0;
-      margin: 0;
-    }
-    h4 {
-      margin: 5px 0 5px 15px;
-    }
-    #map-30min {
-      width: 100%;
-      height: 100%;
-    }
-    .line {
-      fill: none;
-      stroke: rgb(255, 51, 51);
-      stroke-width: 2px;
-    }
-    .lineToCompare {
-      fill: none;
-      stroke: rgb(255, 204, 0);
-      stroke-width: 2px;
-    }
-    /*#popup {
-      position: absolute;
-      visibility: hidden;
-      z-index: 1000;
-      width: 200px;
-      height: 200px;
-      background-color: #eee;
-    }*/
-    #graph-box {
-      position: absolute;
-      width: 350px;
-      height: 200px;
-      bottom: 20px;
-      left: 20px;
-      padding: 10px 10px 10px 0;
-      background-color: rgba(150, 150, 150, 0.9);
-      z-index: 1000;
-    }
-    .info {
-      background-color: #fff;
-      padding: 3px;
-    }
-    .legend {
-    line-height: 18px;
-    color: #555;
-    }
-    .legend i {
-        width: 18px;
-        height: 18px;
-        float: left;
-        margin-right: 8px;
-        opacity: 0.7;
-    }
-  </style>
+  <link rel="stylesheet" href="./css/map-page.css">
 </head>
 <body>
+
   <div id="map-30min"></div>
   <script src="https://mapzen.com/js/mapzen.min.js"></script>
+  <script src="./assets/globalAsset.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.js"></script>
+  <script src="./js/subgraph.js"></script>
   <script>
-    // map
+
+    L.Mapzen.apiKey = 'matrix-5kvnWuh';
     var map = L.Mapzen.map('map-30min',{
-      debugTangram: true,
-      scene: './assets/detailed-scene.yaml',
-      minZoom: 14,
-      zoomControl: false,
-      paddingTopLeft: [0, 300]
+      tangramOptions: {
+        scene: 'assets/detailed-scene.yaml'
+      },
+      zoomControl: false
     });
-    map.setView([37.5759,126.9768], 15);
 
-    // add legend for isochrone data
-    var legend = L.control({position: 'bottomright'});
-    legend.onAdd = function (map) {
+    map.setView([37.5601,126.9794], 14.3);
 
-      var div = L.DomUtil.create('div', 'info legend'),
-        grades = ['2015년 11, 12월 평균', '2016년'];
-        colors = ['rgb(255, 204, 0)', 'rgb(255, 51, 51)'];
-        // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML +=
-                '<i style="background:' + colors[i] + '"></i> ' +
-                grades[i] + '<br>';
-        }
+    // add legend
+    var legend = L.control({position: 'bottomleft'});
+    var selectedDiv;
+    var selectedLabel;
+    var maxRad, minRad;
+
+    var formatNumber = d3.format(",");
+
+    var request = new XMLHttpRequest();
+    request.open('GET', './assets/total.json', true);
+
+    request.onload = function() {
+      if (this.status >= 200 && this.status < 400) {
+        // Success!
+        var data = JSON.parse(this.response);
+
+        legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info');
+        div.setAttribute('id','legend');
+
+        var graphDiv = L.DomUtil.create('div', '');
+        graphDiv.setAttribute('id','graph-box');
+
+        var circleDiv = L.DomUtil.create('div', 'circle-wrapper');
+
+        selectedDiv = L.DomUtil.create('div', 'circle selected');
+        var maximumDiv = L.DomUtil.create('div', 'circle maximum');
+        var minimumDiv = L.DomUtil.create('div', 'circle minimum');
+
+        selectedDiv.style.backgroundColor = 'gray';
+        maxRad = globalAsset.getSizeByProperty(data.max.properties);//globalAsset.getSizeByProperty(78486);
+        minRad = globalAsset.getSizeByProperty(data.min.properties);//globalAsset.getSizeByProperty(891);
+
+        maximumDiv.style.width = maxRad +'px';
+        maximumDiv.style.height = maxRad+'px';
+        minimumDiv.style.width = minRad+'px';
+        minimumDiv.style.height = minRad+'px';
+        minimumDiv.style.left = (maxRad - minRad)/2 + 'px'
+
+        circleDiv.appendChild(maximumDiv);
+        circleDiv.appendChild(selectedDiv);
+        circleDiv.appendChild(minimumDiv);
+
+        var labelDiv = L.DomUtil.create('div', 'label-wrapper');
+
+        var maxLabel = L.DomUtil.create('div', 'max label');
+        var minLabel = L.DomUtil.create('div', 'min label');
+        selectedLabel = L.DomUtil.create('div', 'selected label');
+
+        maxLabel.style.left = maxRad/2+ 'px';
+        maxLabel.style.bottom = maxRad+ 'px';
+        minLabel.style.left = maxRad/2+ 'px';
+        minLabel.style.bottom = minRad-21+ 'px';
+        selectedLabel.style.width = '0';
+
+        maxLabel.innerHTML = globalAsset.words['max'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(data.max.properties));
+        minLabel.innerHTML =  globalAsset.words['min'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(data.min.properties));
+        //selectedLabel.style.left = maxRad/2+ 'px';
+        //selectedLabel.style.top = maxRad/2+ 'px';
+
+
+        labelDiv.appendChild(maxLabel);
+        labelDiv.appendChild(minLabel);
+        labelDiv.appendChild(selectedLabel);
+
+        circleDiv.appendChild(labelDiv);
+
+        div.appendChild(circleDiv);
+        div.appendChild(graphDiv);
+
 
         return div;
+      };
+
+      legend.addTo(map);
+
+      Graph.prepareData(data.total.properties);
+      Graph.createGraph();
+      } else {
+        // We reached our target server, but it returned an error
+
+      }
     };
 
-    legend.addTo(map);
+    request.onerror = function() {
+      // There was a connection error of some sort
+    };
+
+    request.send();
+
     L.Mapzen.hash({
       map: map
     })
+
 
     map.on('tangramloaded', function(e) {
 
@@ -114,204 +135,49 @@
 
 
       var scene = e.tangramLayer.scene;
-      console.log(scene);
-
-      // append graphs
-      // map.getContainer().append()
-
-
 
       // feature edit popup
-      map.getContainer().addEventListener('mousedown', function (event) {
-        var picking = true;
-        var latlng = map.mouseEventToLatLng(event);
-
-        //var pixel = map.mouseEventToLayerPoint(event);
-        var pixel = { x: event.clientX, y: event.clientY };
-
+      map.getContainer().addEventListener('touchstart', function(event) {
+        var pixel = { x:event.touches[0].clientX, y: event.touches[0].clientY };
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
-
             if (selection.feature.source_name == 'stations') {
-              graphDiv.innerHTML = '';
-              drawSubGraph(selection.feature.properties);
-              // popup.style.left = pixel.x + 'px';
-              // popup.style.top = pixel.y + 'px';
-              // popup.style.visibility = 'visible';
-            } else {
-              // popup.style.visibility = 'hidden';
+              scene.config.global.selected_station = selection.feature.properties.station_name;
+              scene.rebuild().then(function () {
+                // graphDiv.innerHTML = '';
+                Graph.prepareData(selection.feature.properties);
+                Graph.updateGraph();
+              })
             }
-          } else {
-            // popup.style.visibility = 'hidden';
+          }
+        });
+      })
+
+      map.getContainer().addEventListener('mousedown', function (event) {
+        var pixel = { x: event.clientX, y: event.clientY };
+        scene.getFeatureAt(pixel).then(function(selection) {
+          if(selection.feature) {
+            if (selection.feature.source_name == 'stations') {
+              scene.config.global.selected_station = selection.feature.properties.station_name;
+
+              selectedDiv.style.width = globalAsset.getSizeByProperty(selection.feature.properties) +'px';
+              selectedDiv.style.height = globalAsset.getSizeByProperty(selection.feature.properties) +'px';
+              selectedDiv.style.left = (maxRad -  globalAsset.getSizeByProperty(selection.feature.properties))/2+'px';
+              selectedLabel.style.width = '70%';
+              selectedLabel.style.left = (maxRad/2)+'px';
+              selectedLabel.innerHTML =  globalAsset.words['gap'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(selection.feature.properties));
+              selectedLabel.style.bottom = (globalAsset.getSizeByProperty(selection.feature.properties)-21)+ 'px';
+              scene.rebuild().then(function () {
+                // graphDiv.innerHTML = '';
+                Graph.prepareData(selection.feature.properties);
+                Graph.updateGraph();
+              })
+            }
           }
 
         });
       });
     });
-
-
-    var drawSubGraph = function(properties) {
-      var station_name = properties.station_name;
-      var station_line = properties.line_num;
-      var data = properties.dates;
-      var dataToCompare = properties.previous_data;
-
-      var margin = {top: 10, right: 20, bottom: 10, left: 55};
-      // if (!document.querySelector('#line'+station_line)) {
-      //   // Add a row for the line if there is not yet.
-      //   d3.select('#graph-box')
-      //               .append('div')
-      //               .attr('id', 'line'+station_line)
-      //               .append('div')
-      //               .append('h2')
-      //               .html(station_line+'호선')
-      // }
-      var parseTime = d3.timeParse('%Y%m%d');
-      var getDateString = function(ds) {
-        var date = parseTime(ds);
-        return date;
-      }
-
-
-
-
-      var aveExit = 0;
-      var aveEntry = 0;
-      dataToCompare.forEach(function(d) {
-        aveExit += d.turnstile_data[0].exits;
-        aveEntry += d.turnstile_data[0].entries;
-      })
-      aveExit /= dataToCompare.length;
-      aveEntry /= dataToCompare.length;
-
-      var reformedDataToCompare = [];
-
-      var dates = [];
-      data.reverse();
-      data.forEach(function(d) {
-        d.date = getDateString(d.date);
-        dates.push(getDateString(d.date));
-        reformedDataToCompare.push({
-          date: d.date,
-          turnstile_data: [{
-            entries: aveEntry,
-            exits: aveExit
-          }]
-        })
-      });
-
-      var formatTime = d3.timeFormat('%m월%d일');
-
-      var subDiv = d3.select('#graph-box')
-                      .append('div')
-                  .attr('class', 'sub-graph col-md-6 col-xs-12');
-
-      var subDivWidth = document.getElementById('graph-box').clientWidth - 30;
-      var subHeight = document.getElementById('graph-box').clientHeight - 80;
-
-
-      subDiv.append('h4')
-            .text(station_name);
-
-      var subSvg = subDiv
-                    .append('svg')
-                    .attr('width', subDivWidth + margin.left +margin.right)
-                    .attr('height', subHeight + margin.top + margin.bottom)
-                    .append('g')
-                    .attr('transform',
-                          'translate(' + margin.left + ',' + margin.top + ')');
-
-      var subX = d3.scaleTime().range([0, subDivWidth- margin.left]);
-      var subY = d3.scaleLinear().range([subHeight, 0]);
-
-
-      // define the line
-      var subValueline = d3.line()
-          .x(function(d) { return subX(d.date); })
-          .y(function(d) { return subY(d.turnstile_data[0].exits); });
-      //
-
-      var lineToCompare = d3.line()
-          .x(function(d) { return subX(d.date);})
-          .y(function(d) { return subY(d.aveValue);})
-      // var subEntryValueline = d3.line()
-      //     .x(function(d) { return subX(d.date); })
-      //     .y(function(d) { return subY(d.turnstile_data[0].entries); });
-
-
-      var subMin = Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits }));
-      var subMax = Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits}));
-
-      var middle = (subMin + subMax)/2;
-
-      subX.domain(d3.extent(data, function(d) { return d.date; }));
-      subY.domain([subMin*0.9, subMax*1.1]);
-
-
-      // Add the entry valueline path.
-      // subSvg.append('path')
-      //     .data([data])
-      //     .attr('class', 'line'+station_line+ ' entry')
-      //     .attr('d', subEntryValueline);
-
-
-      // Add the valueline path.
-      subSvg.append('path')
-          .data([data])
-          .attr('class', 'line')
-          .attr('d', subValueline);
-
-
-      subSvg.append('path')
-          .data([reformedDataToCompare])
-          .attr('class', 'lineToCompare')
-          .attr('d', subValueline);
-
-      subSvg.append('g')
-          .attr('transform', 'translate(0,' + (subHeight) + ')')
-          .call(d3.axisBottom(subX).tickValues(dates).tickFormat(function(d, i) {
-            if ( i%2 ==0) {
-              return formatTime(d);
-            }
-            else return '';}))
-
-      subSvg.append('g')
-          .call(d3.axisLeft(subY).tickValues([subMin, middle, subMax]));
-
-      // Add Scatter plot points and tooltip
-      subSvg.selectAll('dot')
-          .data(data)
-          .enter().append('svg:image')
-          .attr('width', 6)
-          .attr('height', 6)
-          .attr('xlink:href','./assets/dot.png')
-          .attr('x', function(d, i) {
-            return subX(d.date)-3})
-          .attr('y', function(d, i) {
-            return subY(d.turnstile_data[0].exits)-3})
-        // .on('click',function(d) {
-        //   div.transition()
-        //       .duration(200)
-        //       .style('opacity', .9);
-        //   div .html(formatTime(d.date) + '<br/>'  + d3.format(',')(d.turnstile[0].exits))
-        //       .style('left', (d3.event.pageX - 40) + 'px')
-        //       .style('top', (d3.event.pageY - 35) + 'px');
-        // })
-        // .on('mouseover', function(d) {
-        //   div.transition()
-        //       .duration(200)
-        //       .style('opacity', .9);
-        //   div .html(formatTime(d.date) + '<br/>'  + d3.format(',')(d.turnstile[0].exits))
-        //       .style('left', (d3.event.pageX) + 'px')
-        //       .style('top', (d3.event.pageY - 28) + 'px');
-        // })
-        // .on('mouseout', function(d) {
-        //     div.transition()
-        //         .duration(500)
-        //         .style('opacity', 0);
-        // });
-
-    }
 
   </script>
 </body>

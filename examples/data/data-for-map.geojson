@@ -1,0 +1,2114 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.972559,
+          37.554648
+        ]
+      },
+      "properties": {
+        "station_name": "서울",
+        "station_name_en": "Seoul",
+        "line_num": "1",
+        "lat": "37.554648",
+        "lon": "126.972559",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 88947,
+                "exits": 94027
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 96721,
+                "exits": 100890
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 99335,
+                "exits": 103781
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 110547,
+                "exits": 112480
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 80520,
+                "exits": 86055
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 77060,
+                "exits": 83919
+              }
+            ]
+          }
+        ],
+        "transfer_line": [
+          "4"
+        ],
+        "station_cd": "0150",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 75548,
+                "exits": 82285
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 72515,
+                "exits": 79145
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 81774,
+                "exits": 88104
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 96041,
+                "exits": 98792
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 71133,
+                "exits": 76001
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 76569,
+                "exits": 83997
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.977108,
+          37.564718
+        ]
+      },
+      "properties": {
+        "station_name": "시청",
+        "station_name_en": "City Hall",
+        "line_num": "1",
+        "lat": "37.564718",
+        "lon": "126.977108",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 124620,
+                "exits": 147588
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 123701,
+                "exits": 150854
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 93173,
+                "exits": 105378
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 155836,
+                "exits": 213797
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 68962,
+                "exits": 63863
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 52490,
+                "exits": 55529
+              }
+            ]
+          }
+        ],
+        "transfer_line": [
+          "2"
+        ],
+        "station_cd": "0151",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 40374,
+                "exits": 49110
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 33068,
+                "exits": 30989
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 41523,
+                "exits": 43599
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 69852,
+                "exits": 64266
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 36441,
+                "exits": 35446
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 43713,
+                "exits": 42678
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.982923,
+          37.570161
+        ]
+      },
+      "properties": {
+        "station_name": "종각",
+        "station_name_en": "Jonggak",
+        "line_num": "1",
+        "lat": "37.570161",
+        "lon": "126.982923",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 99287,
+                "exits": 90418
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 109285,
+                "exits": 97077
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 75792,
+                "exits": 64924
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 115790,
+                "exits": 102040
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 58238,
+                "exits": 48781
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 48258,
+                "exits": 42725
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "0152",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 41841,
+                "exits": 39074
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 37818,
+                "exits": 35894
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 50718,
+                "exits": 41751
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 59551,
+                "exits": 46267
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 38996,
+                "exits": 35431
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 40724,
+                "exits": 36195
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.991806,
+          37.571607
+        ]
+      },
+      "properties": {
+        "station_name": "종로3가",
+        "station_name_en": "Jongno 3(sam)-ga",
+        "line_num": "1",
+        "lat": "37.571607",
+        "lon": "126.991806",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 100019,
+                "exits": 106814
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 99089,
+                "exits": 109325
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 80188,
+                "exits": 79020
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 114999,
+                "exits": 118073
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 70544,
+                "exits": 66662
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 57740,
+                "exits": 60864
+              }
+            ]
+          }
+        ],
+        "transfer_line": [
+          "3",
+          "5"
+        ],
+        "station_cd": "0153",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 60731,
+                "exits": 63043
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 53873,
+                "exits": 56569
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 61513,
+                "exits": 62977
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 70831,
+                "exits": 69598
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 52796,
+                "exits": 55659
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 57447,
+                "exits": 59263
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          127.001849,
+          37.570926
+        ]
+      },
+      "properties": {
+        "station_name": "종로5가",
+        "station_name_en": "Jongno 5(o)-ga",
+        "line_num": "1",
+        "lat": "37.570926",
+        "lon": "127.001849",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 33717,
+                "exits": 31278
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 34924,
+                "exits": 31776
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 31839,
+                "exits": 29903
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 38192,
+                "exits": 32886
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 31235,
+                "exits": 29578
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 28163,
+                "exits": 27746
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "0154",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 33968,
+                "exits": 30015
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 27623,
+                "exits": 27556
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 30004,
+                "exits": 30865
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 32827,
+                "exits": 31197
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 29470,
+                "exits": 29076
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 29886,
+                "exits": 29112
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.982618,
+          37.566014
+        ]
+      },
+      "properties": {
+        "station_name": "을지로입구",
+        "station_name_en": "Euljiro 1(il)-ga",
+        "line_num": "2",
+        "lat": "37.566014",
+        "lon": "126.982618",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 65461,
+                "exits": 57282
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 70609,
+                "exits": 61217
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 59177,
+                "exits": 51704
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 99994,
+                "exits": 90181
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 52753,
+                "exits": 45953
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 47067,
+                "exits": 45720
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "0202",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 46375,
+                "exits": 43725
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 43632,
+                "exits": 43387
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 47847,
+                "exits": 45517
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 56655,
+                "exits": 47539
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 40532,
+                "exits": 39584
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 45120,
+                "exits": 42646
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.99191,
+          37.566295
+        ]
+      },
+      "properties": {
+        "station_name": "을지로3가",
+        "station_name_en": "Euljiro 3(sam)-ga",
+        "line_num": "2",
+        "lat": "37.566295",
+        "lon": "126.991910",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 24705,
+                "exits": 23696
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 24965,
+                "exits": 24518
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 23630,
+                "exits": 22260
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 39299,
+                "exits": 37757
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 23218,
+                "exits": 20801
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 18272,
+                "exits": 18845
+              }
+            ]
+          }
+        ],
+        "transfer_line": [
+          "3"
+        ],
+        "station_cd": "0203",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 19173,
+                "exits": 18709
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 17422,
+                "exits": 17234
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 20601,
+                "exits": 20654
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 24785,
+                "exits": 21522
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 17492,
+                "exits": 17042
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 18399,
+                "exits": 18203
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.998079,
+          37.566941
+        ]
+      },
+      "properties": {
+        "station_name": "을지로4가",
+        "station_name_en": "Euljiro 4(sa)-ga",
+        "line_num": "2",
+        "lat": "37.566941",
+        "lon": "126.998079",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 17632,
+                "exits": 17497
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 17125,
+                "exits": 16715
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 16740,
+                "exits": 16518
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 21011,
+                "exits": 19044
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 17263,
+                "exits": 16593
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 14775,
+                "exits": 15172
+              }
+            ]
+          }
+        ],
+        "transfer_line": [
+          "5"
+        ],
+        "station_cd": "0204",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 15967,
+                "exits": 15991
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 14709,
+                "exits": 14984
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 15893,
+                "exits": 16747
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 17612,
+                "exits": 16631
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 14979,
+                "exits": 15483
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 16046,
+                "exits": 16440
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.963672,
+          37.559973
+        ]
+      },
+      "properties": {
+        "station_name": "충정로",
+        "station_name_en": "Chungjeongno",
+        "line_num": "2",
+        "lat": "37.559973",
+        "lon": "126.963672",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 16594,
+                "exits": 15711
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 17630,
+                "exits": 16393
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 15277,
+                "exits": 14993
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 28603,
+                "exits": 24243
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 14171,
+                "exits": 12878
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 13077,
+                "exits": 13662
+              }
+            ]
+          }
+        ],
+        "transfer_line": [
+          "5"
+        ],
+        "station_cd": "0243",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 12701,
+                "exits": 13074
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 11502,
+                "exits": 12029
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 11923,
+                "exits": 12444
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 15073,
+                "exits": 14477
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 11459,
+                "exits": 11689
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 11803,
+                "exits": 12081
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.957748,
+          37.574571
+        ]
+      },
+      "properties": {
+        "station_name": "독립문",
+        "station_name_en": "Dongnimmun",
+        "line_num": "3",
+        "lat": "37.574571",
+        "lon": "126.957748",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 12448,
+                "exits": 10737
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 12658,
+                "exits": 10888
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 10638,
+                "exits": 10042
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 16688,
+                "exits": 11935
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 9075,
+                "exits": 9431
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 8945,
+                "exits": 9641
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "0316",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 7496,
+                "exits": 7819
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 6856,
+                "exits": 6989
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 7659,
+                "exits": 7907
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 10535,
+                "exits": 9757
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 6613,
+                "exits": 6687
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 7930,
+                "exits": 8468
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.97353,
+          37.575762
+        ]
+      },
+      "properties": {
+        "station_name": "경복궁",
+        "station_name_en": "Gyeongbokgung",
+        "line_num": "3",
+        "lat": "37.575762",
+        "lon": "126.973530",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 98674,
+                "exits": 78662
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 85197,
+                "exits": 69747
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 55806,
+                "exits": 45127
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 74551,
+                "exits": 65458
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 34551,
+                "exits": 36785
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 29575,
+                "exits": 31444
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "0317",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 21444,
+                "exits": 24100
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 21882,
+                "exits": 24038
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 24885,
+                "exits": 28995
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 34663,
+                "exits": 33482
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 21032,
+                "exits": 21999
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 26258,
+                "exits": 29657
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.985443,
+          37.576477
+        ]
+      },
+      "properties": {
+        "station_name": "안국",
+        "station_name_en": "Anguk",
+        "line_num": "3",
+        "lat": "37.576477",
+        "lon": "126.985443",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 47572,
+                "exits": 41349
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 55163,
+                "exits": 42675
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 40848,
+                "exits": 36432
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 55533,
+                "exits": 45910
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 33096,
+                "exits": 34043
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 31383,
+                "exits": 33816
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "0318",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 24116,
+                "exits": 27030
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 22545,
+                "exits": 25639
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 28233,
+                "exits": 32749
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 39818,
+                "exits": 36993
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 21651,
+                "exits": 23595
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 30791,
+                "exits": 33956
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.986325,
+          37.560989
+        ]
+      },
+      "properties": {
+        "station_name": "명동",
+        "station_name_en": "Myeong-dong",
+        "line_num": "4",
+        "lat": "37.560989",
+        "lon": "126.986325",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 48830,
+                "exits": 54453
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 50913,
+                "exits": 56589
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 51558,
+                "exits": 57738
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 62644,
+                "exits": 62063
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 50403,
+                "exits": 54872
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 49157,
+                "exits": 54973
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "0424",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 46211,
+                "exits": 51612
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 44798,
+                "exits": 50553
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 48596,
+                "exits": 55743
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 51873,
+                "exits": 56922
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 39273,
+                "exits": 44009
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 49145,
+                "exits": 54841
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.978246,
+          37.558514
+        ]
+      },
+      "properties": {
+        "station_name": "회현",
+        "station_name_en": "Hoehyun",
+        "line_num": "4",
+        "lat": "37.558514",
+        "lon": "126.978246",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 34751,
+                "exits": 37151
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 34345,
+                "exits": 35850
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 33412,
+                "exits": 34232
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 44338,
+                "exits": 45337
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 32939,
+                "exits": 32855
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 31257,
+                "exits": 32284
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "0425",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 30844,
+                "exits": 32022
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 27454,
+                "exits": 28608
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 28377,
+                "exits": 29709
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 32297,
+                "exits": 30737
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 26944,
+                "exits": 27056
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 29636,
+                "exits": 31178
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.966641,
+          37.565773
+        ]
+      },
+      "properties": {
+        "station_name": "서대문",
+        "station_name_en": "Seodaemun",
+        "line_num": "5",
+        "lat": "37.565773",
+        "lon": "126.966641",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 32186,
+                "exits": 29334
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 32558,
+                "exits": 28595
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 22011,
+                "exits": 17738
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 43007,
+                "exits": 31744
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 15370,
+                "exits": 12555
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 11143,
+                "exits": 10259
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "2533",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 10980,
+                "exits": 10817
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 10637,
+                "exits": 10461
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 11378,
+                "exits": 10863
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 18982,
+                "exits": 14750
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 11326,
+                "exits": 10807
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 10879,
+                "exits": 10264
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          126.976669,
+          37.571026
+        ]
+      },
+      "properties": {
+        "station_name": "광화문",
+        "station_name_en": "Gwanghwamun",
+        "line_num": "5",
+        "lat": "37.571026",
+        "lon": "126.976669",
+        "dates": [
+          {
+            "date": "20161203",
+            "turnstile_data": [
+              {
+                "entries": 97238,
+                "exits": 116946
+              }
+            ]
+          },
+          {
+            "date": "20161126",
+            "turnstile_data": [
+              {
+                "entries": 103998,
+                "exits": 121166
+              }
+            ]
+          },
+          {
+            "date": "20161119",
+            "turnstile_data": [
+              {
+                "entries": 86311,
+                "exits": 99305
+              }
+            ]
+          },
+          {
+            "date": "20161112",
+            "turnstile_data": [
+              {
+                "entries": 103326,
+                "exits": 111271
+              }
+            ]
+          },
+          {
+            "date": "20161105",
+            "turnstile_data": [
+              {
+                "entries": 63868,
+                "exits": 70579
+              }
+            ]
+          },
+          {
+            "date": "20161029",
+            "turnstile_data": [
+              {
+                "entries": 52676,
+                "exits": 44257
+              }
+            ]
+          }
+        ],
+        "transfer_line": [],
+        "station_cd": "2534",
+        "previous_data": [
+          {
+            "date": "20151205",
+            "turnstile_data": [
+              {
+                "entries": 22988,
+                "exits": 24927
+              }
+            ]
+          },
+          {
+            "date": "20151128",
+            "turnstile_data": [
+              {
+                "entries": 24085,
+                "exits": 24697
+              }
+            ]
+          },
+          {
+            "date": "20151121",
+            "turnstile_data": [
+              {
+                "entries": 34679,
+                "exits": 37141
+              }
+            ]
+          },
+          {
+            "date": "20151114",
+            "turnstile_data": [
+              {
+                "entries": 25252,
+                "exits": 33860
+              }
+            ]
+          },
+          {
+            "date": "20151107",
+            "turnstile_data": [
+              {
+                "entries": 28916,
+                "exits": 29402
+              }
+            ]
+          },
+          {
+            "date": "20151031",
+            "turnstile_data": [
+              {
+                "entries": 28754,
+                "exits": 29345
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
