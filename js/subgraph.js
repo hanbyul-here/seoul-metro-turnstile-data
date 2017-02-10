@@ -93,7 +93,7 @@ var Graph = (function() {
   var barWidth;
   var barHeight;
 
-  function drawBarSVG() {
+  function drawBarGraph() {
     barWidth = 100;
     barHeight =  subHeight;
 
@@ -139,7 +139,7 @@ var Graph = (function() {
 
   function drawLegend() {
     var legendSvg = subDiv.append('svg')
-                    .attr('style','position:absolute;right:0;width:'+barWidth);
+                    .attr('style','position:absolute;right:0;width:'+barWidth+'px');
 
     legendSvg.append('rect')
           .attr('fill', globalAsset.subMainColor)
@@ -196,7 +196,7 @@ var Graph = (function() {
     }
   }
 
-  function drawLineSVG() {
+  function drawLineGraph() {
 
     svgBox = subDiv.append('div')
         .attr('id','svg-box');
@@ -437,8 +437,8 @@ var Graph = (function() {
 
   var createGraph = function () {
     drawDOM();
-    drawLineSVG();
-    drawBarSVG();
+    drawLineGraph();
+    drawBarGraph();
     drawLegend();
   }
   var updateGraph = function () {
