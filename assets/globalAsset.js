@@ -39,7 +39,7 @@ var globalAsset = {
     }
   },
   mainColor: "rgb(251, 106, 74)",
-  subMainColor: 'rgb(203, 24, 29)',
+  subMainColor: "rgb(203, 24, 29)",
   getAvereageIncrement: function(feature) {
     var size = 0;
     var previousSize = 0;

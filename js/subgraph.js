@@ -142,7 +142,7 @@ var Graph = (function() {
                     .attr('style','position:absolute;right:0;width:'+barWidth);
 
     legendSvg.append('rect')
-          .attr('fill',globalAsset.subMainColor)
+          .attr('fill', globalAsset.subMainColor)
           .attr('width', 15)
           .attr('height', 15)
           .attr('transform', 'translate(10, 0)');
@@ -156,7 +156,7 @@ var Graph = (function() {
 
     legendSvg.append('g')
           .append('rect')
-          .attr('fill', 'rgb(255, 204, 0')
+          .attr('fill', "rgb(255, 204, 0)")
           .attr('width', 15)
           .attr('height', 15)
           .attr('transform', 'translate(10, 20)');
