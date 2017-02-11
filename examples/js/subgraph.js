@@ -11,18 +11,18 @@ var Graph = (function() {
 
 
   var formatTime = function(time) {
-    if (globalAsset.lng == 'en') {
+    if (GlobalAsset.lng == 'en') {
       var dayTime = d3.timeFormat('%b %d')(time);
       var month = dayTime.split(' ')[0];
       var day = dayTime.split(' ')[1];
       var week = Math.ceil(day /7);
-      return globalAsset.words['week'][globalAsset.lng] + week + ' of ' +  month + globalAsset.words['month'][globalAsset.lng];
+      return GlobalAsset.words['week'][GlobalAsset.lng] + week + ' of ' +  month + GlobalAsset.words['month'][GlobalAsset.lng];
     } else {
       var dayTime = d3.timeFormat('%m %d')(time);
       var month = dayTime.split(' ')[0];
       var day = dayTime.split(' ')[1];
       var week = Math.ceil(day /7);
-      return month + globalAsset.words['month'][globalAsset.lng] + ' ' + week + globalAsset.words['week'][globalAsset.lng] ;
+      return month + GlobalAsset.words['month'][GlobalAsset.lng] + ' ' + week + GlobalAsset.words['week'][GlobalAsset.lng] ;
     }
   };
   var formatNumber = d3.format(",");
@@ -55,8 +55,8 @@ var Graph = (function() {
 
     reformedDataToCompare = [];
 
-    if (globalAsset.lng =='en') station_name = properties.station_name_en || globalAsset.words['totalTitle'][globalAsset.lng];
-    else station_name = properties.station_name || globalAsset.words['totalTitle'][globalAsset.lng];
+    if (GlobalAsset.lng =='en') station_name = properties.station_name_en || GlobalAsset.words['totalTitle'][GlobalAsset.lng];
+    else station_name = properties.station_name || GlobalAsset.words['totalTitle'][GlobalAsset.lng];
 
     transfer_line = properties.transfer_line;
     if (transfer_line) transfer_line.unshift(properties.line_num)
@@ -113,19 +113,19 @@ var Graph = (function() {
 
     barG.append('text')
           .attr('x', 25 - getBarGraphLabelXPos(previousAve))
-          .attr('y', subY(previousAve))
+          .attr('y', subY(previousAve) - 1)
           .text(formatNumber(previousAve))
 
 
     barG.append('rect')
-          .attr('fill', globalAsset.subMainColor)
+          .attr('fill', GlobalAsset.subMainColor)
           .attr('width', 30)
           .attr('height', barHeight-subY(ave))
           .attr('transform', 'translate(50,'+ subY(ave) +')');
 
     barG.append('text')
           .attr('x', 65 - getBarGraphLabelXPos(ave))
-          .attr('y', subY(ave))
+          .attr('y', subY(ave) - 1)
           .text(formatNumber(ave))
 
   }
@@ -142,7 +142,7 @@ var Graph = (function() {
                     .attr('style','position:absolute;right:0;width:'+barWidth+'px');
 
     legendSvg.append('rect')
-          .attr('fill', globalAsset.subMainColor)
+          .attr('fill', GlobalAsset.subMainColor)
           .attr('width', 15)
           .attr('height', 15)
           .attr('transform', 'translate(10, 0)');
@@ -169,7 +169,7 @@ var Graph = (function() {
     legendSvg.append('text')
           .attr('x', barWidth - 80)
           .attr('y', barHeight + 45)
-          .text(globalAsset.words['ave'][globalAsset.lng]);
+          .text(GlobalAsset.words['ave'][GlobalAsset.lng]);
 
   }
 
@@ -223,13 +223,13 @@ var Graph = (function() {
         .x(function(d) { return subX(d.date); })
         .y(function(d) { return subY(d.turnstile_data[0].exits); });
 
-    var subMin = minMaxFormat(Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits })));
+    //var subMin = minMaxFormat(Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits })));
     var subMax = minMaxFormat(Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits})));
 
     subX.domain([data[0].date, data[data.length-1].date]);
-    subY.domain([subMin, subMax*1.05]);
+    subY.domain([0, subMax*1.05]);
 
-      // Add the valueline path.
+      // Add the valueline path
     subSvg.append('path')
         .data([data])
         .attr('class', 'line')
@@ -269,7 +269,7 @@ var Graph = (function() {
       .append('circle')
       .attr('class', 'circledot')
       .attr('r', 6)
-      .attr('fill', globalAsset.subMainColor)
+      .attr('fill', GlobalAsset.subMainColor)
       .attr('cx', function(d, i) {
         return subX(d.date)})
       .attr('cy', function(d, i) {
@@ -315,7 +315,7 @@ var Graph = (function() {
     return '<h6>' +formatTime(d.date) + '</h6>'  +
             '2015 : ' + d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
             '2016 : ' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '<br/>'  +
-            globalAsset.words.gap[globalAsset.lng] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
+            GlobalAsset.words.gap[GlobalAsset.lng] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
   }
 
 
@@ -340,12 +340,12 @@ var Graph = (function() {
           })
   }
 
-  function updateYAxis() {
-    var subMin = Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits }));
-    var subMax = Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits}));
+  function updateYAxis(max) {
+    //var subMin = Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits }));
+    //var subMax = Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits}));
     // var middle = (subMin + subMax)/2;
 
-    subY.domain([subMin, subMax*1.05]);
+    subY.domain([0, max*1.05]);
     subDiv.select('.yaxis')
           .transition().duration(200)
           .call(d3.axisLeft(subY)
@@ -362,7 +362,7 @@ var Graph = (function() {
       .append('circle')
       .attr('class', 'circledot')
       .attr('r', 6)
-      .attr('fill', globalAsset.subMainColor)
+      .attr('fill', GlobalAsset.subMainColor)
       .attr('cx', function(d, i) {
         return subX(d.date)})
       .attr('cy', function(d, i) {
@@ -419,19 +419,19 @@ var Graph = (function() {
 
     barG.append('text')
           .attr('x', 25 - getBarGraphLabelXPos(ave))
-          .attr('y', subY(previousAve))
+          .attr('y', subY(previousAve) - 1)
           .text(formatNumber(previousAve))
 
 
     barG.append('rect')
-          .attr('fill', globalAsset.subMainColor)
+          .attr('fill', GlobalAsset.subMainColor)
           .attr('width', 30)
           .attr('height', barHeight-subY(ave))
           .attr('transform', 'translate(50,'+ subY(ave) +')');
 
     barG.append('text')
           .attr('x', 65 - getBarGraphLabelXPos(ave))
-          .attr('y', subY(ave))
+          .attr('y', subY(ave) - 1)
           .text(formatNumber(ave))
   }
 
@@ -442,7 +442,6 @@ var Graph = (function() {
     drawLegend();
   }
   var updateGraph = function () {
-    updateYAxis();
     updateLineGraph();
     updateBarGraph();
     updateTipDots();
@@ -452,6 +451,7 @@ var Graph = (function() {
   return {
     prepareData: prepareData,
     createGraph: createGraph,
-    updateGraph: updateGraph
+    updateGraph: updateGraph,
+    updateYAxis: updateYAxis
   }
 })()

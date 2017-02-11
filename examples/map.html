@@ -12,7 +12,7 @@
 
   <div id="map-30min"></div>
   <script src="https://mapzen.com/js/mapzen.min.js"></script>
-  <script src="./assets/globalAsset.js"></script>
+  <script src="./assets/GlobalAsset.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.js"></script>
   <script src="./js/subgraph.js"></script>
   <script>
@@ -32,6 +32,8 @@
     var selectedDiv;
     var selectedLabel;
     var maxRad, minRad;
+    var first = true;
+    var maxP, minP;
 
     var formatNumber = d3.format(",");
 
@@ -58,8 +60,8 @@
         var minimumDiv = L.DomUtil.create('div', 'circle minimum');
 
         selectedDiv.style.backgroundColor = 'gray';
-        maxRad = globalAsset.getSizeByProperty(data.max.properties);//globalAsset.getSizeByProperty(78486);
-        minRad = globalAsset.getSizeByProperty(data.min.properties);//globalAsset.getSizeByProperty(891);
+        maxRad = GlobalAsset.getSizeByProperty(data.max.properties);//GlobalAsset.getSizeByProperty(78486);
+        minRad = GlobalAsset.getSizeByProperty(data.min.properties);//GlobalAsset.getSizeByProperty(891);
 
         maximumDiv.style.width = maxRad +'px';
         maximumDiv.style.height = maxRad+'px';
@@ -83,10 +85,12 @@
         minLabel.style.bottom = minRad-21+ 'px';
         selectedLabel.style.width = '0';
 
-        maxLabel.innerHTML = globalAsset.words['max'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(data.max.properties));
-        minLabel.innerHTML =  globalAsset.words['min'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(data.min.properties));
+        maxP = data.max.properties;
+        minP = data.min.properties;
+
+        maxLabel.innerHTML = GlobalAsset.words['max'][GlobalAsset.lng] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(maxP));
+        minLabel.innerHTML =  GlobalAsset.words['min'][GlobalAsset.lng] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(minP));
         //selectedLabel.style.left = maxRad/2+ 'px';
-        //selectedLabel.style.top = maxRad/2+ 'px';
 
 
         labelDiv.appendChild(maxLabel);
@@ -142,12 +146,7 @@
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
             if (selection.feature.source_name == 'stations') {
-              scene.config.global.selected_station = selection.feature.properties.station_name;
-              scene.rebuild().then(function () {
-                // graphDiv.innerHTML = '';
-                Graph.prepareData(selection.feature.properties);
-                Graph.updateGraph();
-              })
+              updateWithSelectedFeature(scene, selection);
             }
           }
         });
@@ -158,27 +157,33 @@
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
             if (selection.feature.source_name == 'stations') {
-              scene.config.global.selected_station = selection.feature.properties.station_name;
-
-              selectedDiv.style.width = globalAsset.getSizeByProperty(selection.feature.properties) +'px';
-              selectedDiv.style.height = globalAsset.getSizeByProperty(selection.feature.properties) +'px';
-              selectedDiv.style.left = (maxRad -  globalAsset.getSizeByProperty(selection.feature.properties))/2+'px';
-              selectedLabel.style.width = '70%';
-              selectedLabel.style.left = (maxRad/2)+'px';
-              selectedLabel.innerHTML =  globalAsset.words['gap'][globalAsset.lng] + ' : ' + formatNumber(globalAsset.getAvereageIncrement(selection.feature.properties));
-              selectedLabel.style.bottom = (globalAsset.getSizeByProperty(selection.feature.properties)-21)+ 'px';
-              scene.rebuild().then(function () {
-                // graphDiv.innerHTML = '';
-                Graph.prepareData(selection.feature.properties);
-                Graph.updateGraph();
-              })
+              updateWithSelectedFeature(scene, selection);
             }
           }
-
         });
       });
     });
 
+
+  function updateWithSelectedFeature(scene, selection) {
+    scene.config.global.selected_station = selection.feature.properties.station_name;
+    if (first) {
+      Graph.updateYAxis(GlobalAsset.getMax(maxP));
+      first = false;
+    }
+    selectedDiv.style.width = GlobalAsset.getSizeByProperty(selection.feature.properties) +'px';
+    selectedDiv.style.height = GlobalAsset.getSizeByProperty(selection.feature.properties) +'px';
+    selectedDiv.style.left = (maxRad -  GlobalAsset.getSizeByProperty(selection.feature.properties))/2+'px';
+    selectedLabel.style.width = '70%';
+    selectedLabel.style.left = (maxRad/2)+'px';
+    selectedLabel.innerHTML =  GlobalAsset.words['gap'][GlobalAsset.lng] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(selection.feature.properties));
+    selectedLabel.style.bottom = (GlobalAsset.getSizeByProperty(selection.feature.properties)-21)+ 'px';
+    scene.rebuild().then(function () {
+      // graphDiv.innerHTML = '';
+      Graph.prepareData(selection.feature.properties);
+      Graph.updateGraph();
+    });
+  }
   </script>
 </body>
 </html>
