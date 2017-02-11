@@ -1,4 +1,4 @@
-var globalAsset = {
+var GlobalAsset = {
   lng: 'en',
   words: {
     totalTitle: {
@@ -50,6 +50,15 @@ var globalAsset = {
     size /= feature.dates.length;
     previousSize /= feature.dates.length;
     return Math.floor(size - previousSize);
+  },
+  getMax: function(feature) {
+    var max;
+    for (var i = 0; i < feature.dates.length;i++) {
+      if(!max) max = feature.dates[i].turnstile_data[0].exits;
+      if(max < feature.dates[i].turnstile_data[0].exits) max = feature.dates[i].turnstile_data[0].exits;
+    }
+
+    return max;
   },
   getSizeByProperty: function(feature) {
     var size = 0;

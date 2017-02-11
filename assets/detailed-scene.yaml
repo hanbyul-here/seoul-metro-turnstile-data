@@ -69,12 +69,12 @@ layers:
           function () {
             if (global.selected_station) {
               if (global.selected_station == feature.station_name) {
-                return (globalAsset.getSizeByProperty(feature)+10);
+                return (GlobalAsset.getSizeByProperty(feature)+10);
               } else {
                 return 0;
               }
             } else {
-              return (globalAsset.getSizeByProperty(feature)+10);
+              return (GlobalAsset.getSizeByProperty(feature)+10);
             }
           }
   stations:
@@ -87,7 +87,7 @@ layers:
         color: rgb(239, 59, 44)
         size: |
           function () {
-            return globalAsset.getSizeByProperty(feature);
+            return GlobalAsset.getSizeByProperty(feature);
           }
         text:
           collide: false
@@ -95,7 +95,7 @@ layers:
           anchor: bottom
           text_source: |
             function () {
-              if (globalAsset.lng == 'en') return feature.station_name_en;
+              if (GlobalAsset.lng == 'en') return feature.station_name_en;
               else return feature.station_name;
             }
           font:
