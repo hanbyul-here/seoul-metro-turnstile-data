@@ -1,5 +1,5 @@
 var GlobalAsset = {
-  lng: 'en',
+  lang: 'en',
   words: {
     totalTitle: {
       kr: '12개 역의 승객 추이 변화',
