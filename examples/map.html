@@ -11,8 +11,9 @@
 <body>
 
   <div id="map-30min"></div>
-  <script src="https://mapzen.com/js/mapzen.min.js"></script>
+
   <script src="./assets/GlobalAsset.js"></script>
+  <script src="https://mapzen.com/js/mapzen.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.4.0/d3.js"></script>
   <script src="./js/subgraph.js"></script>
   <script>
@@ -88,8 +89,8 @@
         maxP = data.max.properties;
         minP = data.min.properties;
 
-        maxLabel.innerHTML = GlobalAsset.words['max'][GlobalAsset.lng] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(maxP));
-        minLabel.innerHTML =  GlobalAsset.words['min'][GlobalAsset.lng] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(minP));
+        maxLabel.innerHTML = GlobalAsset.words['max'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(maxP));
+        minLabel.innerHTML =  GlobalAsset.words['min'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(minP));
         //selectedLabel.style.left = maxRad/2+ 'px';
 
 
@@ -102,6 +103,19 @@
         div.appendChild(circleDiv);
         div.appendChild(graphDiv);
 
+        div.addEventListener('mouseover', function () {
+          map.dragging.disable();
+        });
+
+        div.addEventListener('mouseout', function () {
+          map.dragging.enable();
+        });
+        div.addEventListener('touchstart', function () {
+          map.dragging.disable();
+        });
+        div.addEventListener('touchend', function () {
+          map.dragging.enable();
+        });
 
         return div;
       };
@@ -176,7 +190,7 @@
     selectedDiv.style.left = (maxRad -  GlobalAsset.getSizeByProperty(selection.feature.properties))/2+'px';
     selectedLabel.style.width = '70%';
     selectedLabel.style.left = (maxRad/2)+'px';
-    selectedLabel.innerHTML =  GlobalAsset.words['gap'][GlobalAsset.lng] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(selection.feature.properties));
+    selectedLabel.innerHTML =  GlobalAsset.words['gap'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(selection.feature.properties));
     selectedLabel.style.bottom = (GlobalAsset.getSizeByProperty(selection.feature.properties)-21)+ 'px';
     scene.rebuild().then(function () {
       // graphDiv.innerHTML = '';

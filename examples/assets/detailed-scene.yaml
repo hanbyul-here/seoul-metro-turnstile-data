@@ -69,7 +69,7 @@ layers:
           function () {
             if (global.selected_station) {
               if (global.selected_station == feature.station_name) {
-                return (GlobalAsset.getSizeByProperty(feature)+10);
+                return (GlobalAsset.getSizeByProperty(feature)+13);
               } else {
                 return 0;
               }
@@ -95,7 +95,7 @@ layers:
           anchor: bottom
           text_source: |
             function () {
-              if (GlobalAsset.lng == 'en') return feature.station_name_en;
+              if (GlobalAsset.lang == 'en') return feature.station_name_en;
               else return feature.station_name;
             }
           font:

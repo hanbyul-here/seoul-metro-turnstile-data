@@ -11,18 +11,18 @@ var Graph = (function() {
 
 
   var formatTime = function(time) {
-    if (GlobalAsset.lng == 'en') {
+    if (GlobalAsset.lang == 'en') {
       var dayTime = d3.timeFormat('%b %d')(time);
       var month = dayTime.split(' ')[0];
       var day = dayTime.split(' ')[1];
       var week = Math.ceil(day /7);
-      return GlobalAsset.words['week'][GlobalAsset.lng] + week + ' of ' +  month + GlobalAsset.words['month'][GlobalAsset.lng];
+      return GlobalAsset.words['week'][GlobalAsset.lang] + week + ' of ' +  month + GlobalAsset.words['month'][GlobalAsset.lang];
     } else {
       var dayTime = d3.timeFormat('%m %d')(time);
       var month = dayTime.split(' ')[0];
       var day = dayTime.split(' ')[1];
       var week = Math.ceil(day /7);
-      return month + GlobalAsset.words['month'][GlobalAsset.lng] + ' ' + week + GlobalAsset.words['week'][GlobalAsset.lng] ;
+      return month + GlobalAsset.words['month'][GlobalAsset.lang] + ' ' + week + GlobalAsset.words['week'][GlobalAsset.lang] ;
     }
   };
   var formatNumber = d3.format(",");
@@ -55,8 +55,8 @@ var Graph = (function() {
 
     reformedDataToCompare = [];
 
-    if (GlobalAsset.lng =='en') station_name = properties.station_name_en || GlobalAsset.words['totalTitle'][GlobalAsset.lng];
-    else station_name = properties.station_name || GlobalAsset.words['totalTitle'][GlobalAsset.lng];
+    if (GlobalAsset.lang =='en') station_name = properties.station_name_en || GlobalAsset.words['totalTitle'][GlobalAsset.lang];
+    else station_name = properties.station_name || GlobalAsset.words['totalTitle'][GlobalAsset.lang];
 
     transfer_line = properties.transfer_line;
     if (transfer_line) transfer_line.unshift(properties.line_num)
@@ -169,7 +169,7 @@ var Graph = (function() {
     legendSvg.append('text')
           .attr('x', barWidth - 80)
           .attr('y', barHeight + 45)
-          .text(GlobalAsset.words['ave'][GlobalAsset.lng]);
+          .text(GlobalAsset.words['ave'][GlobalAsset.lang]);
 
   }
 
@@ -315,7 +315,7 @@ var Graph = (function() {
     return '<h6>' +formatTime(d.date) + '</h6>'  +
             '2015 : ' + d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
             '2016 : ' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '<br/>'  +
-            GlobalAsset.words.gap[GlobalAsset.lng] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
+            GlobalAsset.words.gap[GlobalAsset.lang] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
   }
 
 
