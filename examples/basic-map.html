@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://mapzen.com/js/mapzen.css">
+  <style> /* set the CSS */
+    html, body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+    .info {
+      background-color: #eee;
+      padding: 3px;
+    }
+    .map-legend {
+    line-height: 18px;
+    color: #555;
+    }
+    .map-legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+
+    .legend {
+      position: absolute;
+      right: 30px;
+      bottom: 80px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="map"></div>
+  <script src="https://mapzen.com/js/mapzen.min.js"></script>
+  <script>
+    // map
+    L.Mapzen.apiKey = 'matrix-5kvnWuh';
+    var map = L.Mapzen.map('map', {
+      tangramOptions: {
+        scene: './assets/basic-scene.yaml'
+      }
+    });
+
+    map.setView([37.5676, 126.9802], 14);
+    // add legend for isochrone data
+    var legend = L.control({position: 'bottomright'});
+    legend.onAdd = function (map) {
+
+      var div = L.DomUtil.create('div', 'info map-legend'),
+        grades = ['15 min', '30 min', '45 min', '60 min'];
+        colors = ['#175700', '#4c7a00', '#85ae30', '#d9e5b2'];
+        div.innerHTML = 'from Gwanghwamun<br>';
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + colors[i] + '"></i> ' +
+                grades[i] + ' <br>';
+        }
+      return div;
+    };
+
+    legend.addTo(map);
+
+    L.Mapzen.hash({
+      map: map
+    });
+
+  </script>
+</body>
+</html>
