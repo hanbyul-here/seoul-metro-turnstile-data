@@ -11,7 +11,7 @@ textures:
 
 global:
   selected_station: null
-  lng: 'en'
+  lang: 'en'
 
 styles:
   alpha_polygons:
@@ -95,7 +95,7 @@ layers:
           anchor: bottom
           text_source: |
             function () {
-              if (GlobalAsset.lang == 'en') return feature.station_name_en;
+              if (global.lang == 'en') return feature.station_name_en;
               else return feature.station_name;
             }
           font:
