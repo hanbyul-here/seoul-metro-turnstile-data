@@ -1,4 +1,3 @@
-
 var GlobalAsset = {
   lang: 'en',
   words: {
