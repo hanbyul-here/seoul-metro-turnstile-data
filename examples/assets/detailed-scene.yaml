@@ -33,7 +33,7 @@ sources:
   stations:
     type: GeoJSON
     url: '../data/data-for-map.geojson'
-    scripts: ['./globalAsset.js']
+    scripts: ['./GlobalAsset.js']
 
 layers:
   isochrone:
