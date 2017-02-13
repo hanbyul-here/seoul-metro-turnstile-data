@@ -1,0 +1,90 @@
+import:
+  - https://mapzen.com/carto/refill-style-no-labels/4/refill-style-no-labels.yaml
+
+textures:
+  pois:
+    url: './refill@2x.png'
+    filtering: mipmap
+    sprites:
+      # define sprites: [x origin, y origin, width, height]
+      train: [410, 0, 36, 36]
+
+styles:
+  alpha_polygons:
+    base: polygons
+    blend: multiply
+  icons:
+    base: points
+    texture: pois
+    blend_order: 1
+
+sources:
+  isochrone:
+    type: GeoJSON
+    url: '../data/isochrone.json'
+
+  subway_line:
+    type: GeoJSON
+    url: '../data/subway-line-shape.geojson'
+
+  stations:
+    type: GeoJSON
+    url: '../data/data-for-map.geojson'
+
+  all-stations:
+    type: GeoJSON
+    url: '../data/all-stations.geojson'
+
+layers:
+  isochrone:
+    data: { source: isochrone}
+    draw:
+      alpha_polygons:
+        order: 2999
+        color: |
+          function() {
+              if (feature.contour == 15) return '#50bf40';
+              if (feature.contour == 30) return '#9fbf40';
+              if (feature.contour == 45) return '#b2cc66';
+              if (feature.contour == 60) return '#d9e5b2';
+           }
+  # all-stations:
+  #   data: { source: all-stations}
+  #   draw:
+  #     order: 3000
+  #     icons:
+  #       sprite: train
+  #       size: [10px, 10px]
+  #       centroid: true
+  stations:
+    data: { source: all-stations}
+    draw:
+      order: 3100
+      icons:
+        collide: true
+        sprite: train
+        size: [15px, 15px]
+        centroid: true
+    # station-labels:
+    #   filter: { $zoom: { min: 14} }
+    #   draw:
+    #     text:
+    #       collide: false
+    #       offset: [0px, 15px]
+    #       text_source: station_name
+    #       font:
+    #         fill: white
+    #         size: 12px
+  subway_line:
+    data: { source: subway_line}
+    draw:
+      lines:
+        order: 3000
+        color: |
+          function() {
+            return feature.line_color
+          }
+        width: 5px
+        outline:
+          color: gray
+          width: 1px
