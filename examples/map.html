@@ -32,6 +32,8 @@
     var legend = L.control({position: 'bottomleft'});
     var selectedDiv;
     var selectedLabel;
+    var selectedFeature;
+
     var maxRad, minRad;
     var first = true;
     var maxP, minP;
@@ -81,9 +83,9 @@
         selectedLabel = L.DomUtil.create('div', 'selected label');
 
         maxLabel.style.left = maxRad/2+ 'px';
-        maxLabel.style.bottom = maxRad+ 'px';
+        maxLabel.style.bottom = 30 + maxRad+ 'px';
         minLabel.style.left = maxRad/2+ 'px';
-        minLabel.style.bottom = minRad-21+ 'px';
+        minLabel.style.bottom = 30 + minRad-21+ 'px';
         selectedLabel.style.width = '0';
 
         maxP = data.max.properties;
@@ -122,11 +124,30 @@
 
       legend.addTo(map);
 
-      Graph.prepareData(data.total.properties);
-      Graph.createGraph();
-      } else {
-        // We reached our target server, but it returned an error
+      if (isThisSmallScreen()) {
+        var isDetailsOpen = false;
+        var legendBox = legend.getContainer();
+        legendBox.style.bottom = '-165px';
+        var openButton = L.DomUtil.create('button', 'open');
+        openButton.innerHTML = 'Open details';
+        legendBox.append(openButton);
+        openButton.addEventListener('click', function (e) {
+          if (isDetailsOpen) {
+            openButton.innerHTML = 'Open details';
+            legendBox.style.bottom = '-165px';
+            isDetailsOpen = false;
+          } else {
+            openButton.innerHTML = 'Close details';
+            legendBox.style.bottom = '15px';
+            isDetailsOpen = true;
+          }
+        });
+      }
 
+        Graph.prepareData(data.total.properties);
+        Graph.createGraph();
+      } else {
+        // We reached our target server, but it returned an error\
       }
     };
 
@@ -183,7 +204,12 @@
     });
 
 
+  function isThisSmallScreen() {
+    return (window.innerWidth <= 768);
+  }
+
   function updateWithSelectedFeature(scene, selection) {
+    selectedFeature = selection.feature;
     scene.config.global.selected_station = selection.feature.properties.station_name;
     if (first) {
       Graph.updateYAxis(GlobalAsset.getMax(maxP));
@@ -195,7 +221,7 @@
     selectedLabel.style.width = '70%';
     selectedLabel.style.left = (maxRad/2)+'px';
     selectedLabel.innerHTML =  GlobalAsset.words['gap'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(selection.feature.properties));
-    selectedLabel.style.bottom = (GlobalAsset.getSizeByProperty(selection.feature.properties)-21)+ 'px';
+    selectedLabel.style.bottom = (GlobalAsset.getSizeByProperty(selection.feature.properties)-21 + 30)+ 'px';
     scene.rebuild().then(function () {
       // graphDiv.innerHTML = '';
       Graph.prepareData(selection.feature.properties);
