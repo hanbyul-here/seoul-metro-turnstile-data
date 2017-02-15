@@ -1,14 +1,6 @@
 import:
   - https://mapzen.com/carto/refill-style-no-labels/refill-style-no-labels.yaml
 
-# textures:
-#   pois:
-#     url: './refill@2x.png'
-#     filtering: mipmap
-#     sprites:
-#       # define sprites: [x origin, y origin, width, height]
-#       train: [410, 0, 36, 36]
-
 global:
   sdk_transit_overlay: true
   selected_station: null
