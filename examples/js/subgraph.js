@@ -37,7 +37,8 @@ var Graph = (function() {
 
   var tooltipDiv = d3.select('body').append('div')
     .attr('class', 'tooltip')
-    .style('opacity', 0);
+    .style('opacity', 0)
+    .style('height', 0);
 
 
   var parseTime = d3.timeParse('%Y%m%d');
@@ -279,6 +280,7 @@ var Graph = (function() {
           .duration(200)
           .style('opacity', .9);
       tooltipDiv.html(getTooltipHTML(d, i))
+          .style('height', 'auto')
           .style('left', (d3.event.pageX) + 15 + 'px')
           .style('top', (d3.event.pageY - 28) + 'px');
 
@@ -300,6 +302,7 @@ var Graph = (function() {
           .duration(200)
           .style('opacity', .9);
       tooltipDiv.html(getTooltipHTML(d, i))
+                .style('height', 'auto')
                 .style('left', (d3.event.pageX) + 15 + 'px')
                 .style('top', (d3.event.pageY - 28) + 'px');
 
@@ -307,14 +310,15 @@ var Graph = (function() {
     .on('mouseout', function(d) {
         tooltipDiv.transition()
             .duration(500)
+            .style('height', 0)
             .style('opacity', 0);
     });
   }
 
   function getTooltipHTML(d, i) {
     return '<h6>' +formatTime(d.date) + '</h6>'  +
-            '2015 : ' + d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-            '2016 : ' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '<br/>'  +
+            '2016 : ' + d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
+            '2015 : ' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '<br/>'  +
             GlobalAsset.words.gap[GlobalAsset.lang] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
   }
 
@@ -370,6 +374,7 @@ var Graph = (function() {
     .on('click',function(d, i) {
       tooltipDiv.transition()
           .duration(200)
+          .style('height', 'auto')
           .style('opacity', .9);
       tooltipDiv.html(getTooltipHTML(d, i))
       .style('left', (d3.event.pageX) + 10 + 'px')
@@ -378,6 +383,7 @@ var Graph = (function() {
     .on('mouseover', function(d, i) {
       tooltipDiv.transition()
           .duration(200)
+          .style('height', 'auto')
           .style('opacity', .9);
       tooltipDiv .html(getTooltipHTML(d, i))
       .style('left', (d3.event.pageX) + 10 +'px')
@@ -386,6 +392,7 @@ var Graph = (function() {
     .on('mouseout', function(d) {
         tooltipDiv.transition()
             .duration(500)
+            .style('height', 0)
             .style('opacity', 0);
     });
   }
@@ -435,23 +442,30 @@ var Graph = (function() {
           .text(formatNumber(ave))
   }
 
-  var createGraph = function () {
+  function createGraph () {
     drawDOM();
     drawLineGraph();
     drawBarGraph();
     drawLegend();
   }
-  var updateGraph = function () {
+  function updateGraph () {
     updateLineGraph();
     updateBarGraph();
     updateTipDots();
     updateDOM();
   }
 
+  function destroy () {
+    d3.select('.line').remove();
+    d3.select('.lineToCompare').remove();
+    barSvg.select('.bar-graph').remove();
+  }
+
   return {
     prepareData: prepareData,
     createGraph: createGraph,
     updateGraph: updateGraph,
-    updateYAxis: updateYAxis
+    updateYAxis: updateYAxis,
+    destroy: destroy
   }
 })()
