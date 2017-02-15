@@ -1,15 +1,16 @@
 import:
-  - https://mapzen.com/carto/refill-style-no-labels/4/refill-style-no-labels.yaml
+  - https://mapzen.com/carto/refill-style-no-labels/refill-style-no-labels.yaml
 
-textures:
-  pois:
-    url: './refill@2x.png'
-    filtering: mipmap
-    sprites:
-      # define sprites: [x origin, y origin, width, height]
-      train: [410, 0, 36, 36]
+# textures:
+#   pois:
+#     url: './refill@2x.png'
+#     filtering: mipmap
+#     sprites:
+#       # define sprites: [x origin, y origin, width, height]
+#       train: [410, 0, 36, 36]
 
 global:
+  sdk_transit_overlay: true
   selected_station: null
   lang: 'en'
 
@@ -26,16 +27,18 @@ sources:
   isochrone:
     type: GeoJSON
     url: '../data/isochrone.json'
-  subway_line:
-    type: GeoJSON
-    url: '../data/subway-line-shape.geojson'
-
   stations:
     type: GeoJSON
     url: '../data/data-for-map.geojson'
     scripts: ['./GlobalAsset.js']
 
 layers:
+  transit:
+    data: { source: mapzen, layer: transit }
+    lables-transit-lines:
+      draw:
+        icons:
+          visible: false
   isochrone:
     data: { source: isochrone}
     draw:
@@ -45,19 +48,6 @@ layers:
           function() {
               if (feature.contour == 30) return '#9fbf40';
            }
-  subway_line:
-    data: { source: subway_line}
-    draw:
-      lines:
-        order: 3000
-        color: |
-          function() {
-            return feature.line_color
-          }
-        width: 3px
-        outline:
-          color: gray
-          width: 1px
   selected-data:
     data: { source: stations}
     draw:
