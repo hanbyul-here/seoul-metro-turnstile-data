@@ -11,6 +11,9 @@ html, body {
 .area {
   fill: rgb(60, 60, 60);
 }
+#legend {
+  background-color: #eee;
+}
 .circle-wrapper {
   position:relative;
   /*padding-left: 10px;*/
@@ -147,7 +150,10 @@ html, body {
 }
 .tick foreignObject {
   transform: translate(-20px,0);
+  line-height: 1.1;
+  text-align: center;
 }
+
 .info {
   background-color: #fff;
   padding: 3px;
