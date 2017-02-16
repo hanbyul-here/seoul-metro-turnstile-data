@@ -1,0 +1,76 @@
+import:
+  - https://mapzen.com/carto/refill-style/6/refill-style.yaml
+global:
+  sdk_transit_overlay: true
+  sdk_road_shields: false
+
+textures:
+  custom-pois:
+    url: './refill%402x.png'
+    filtering: mipmap
+    sprites:
+      # define sprites: [x origin, y origin, width, height]
+      custom-train: [410, 0, 36, 36]
+
+styles:
+  alpha_polygons:
+    base: polygons
+    blend: multiply
+  custom-icon:
+    base: points
+    texture: custom-pois
+    blend_order: 1
+
+sources:
+  isochrone:
+    type: GeoJSON
+    url: '../data/isochrone.json'
+  all-stations:
+    type: GeoJSON
+    url: '../data/all-stations.geojson'
+
+layers:
+  # Disabling shield for subway line
+  transit:
+    transit-overlay-rail-lines:
+      has-data-color:
+        train-with-color:
+          filter: { kind: train }
+          draw:
+            lines:
+              color: |
+                  function(){
+                      var colour = feature.colour;
+                      if (colour.charAt(0) != '#'){
+                          colour = '#' + colour ;
+                          }
+                      return colour;
+                      }
+              order: 514
+    # data: { source: mapzen, layer: transit }
+    lables-transit-lines:
+      draw:
+        icons:
+          visible: false
+
+  isochrone:
+    data: { source: isochrone}
+    draw:
+      alpha_polygons:
+        order: 500
+        color: |
+          function() {
+              if (feature.contour == 15) return '#50bf40';
+              if (feature.contour == 30) return '#9fbf40';
+              if (feature.contour == 45) return '#b2cc66';
+              if (feature.contour == 60) return '#d9e5b2';
+           }
+  stations:
+    data: { source: all-stations}
+    draw:
+      order: 3100
+      custom-icon:
+        collide: true
+        sprite: custom-train
+        size: [[13, 10px],[14,14px],[15, 20px]]
+        centroid: true
