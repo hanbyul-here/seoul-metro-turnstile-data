@@ -24,6 +24,6 @@ var HashFormatter = {
 }
 
 
-if (HashFormatter.parseHashToObj().lang) {
-  GlobalAsset.lang = HashFormatter.parseHashToObj().lang;
+if (HashFormatter.parseHashToObj()) {
+  GlobalAsset.lang = HashFormatter.parseHashToObj().lang || 'en';
 }

@@ -310,11 +310,12 @@ var Graph = (function() {
           .tickPadding(5)
           .tickSize(-mainDivHeight)
           .tickFormat(function(d, i) {
-            if ( i%2 ==0) {
+            // if ( i%2 ==0) {
               return formatTime(d);
-            }
-            else return '';})
-          )
+            // }
+            // else return '';})
+          })
+        )
         .selectAll('text')
         .call(wrap);
 
@@ -364,9 +365,10 @@ var Graph = (function() {
 
   function getTooltipHTML(d, i) {
     return '<h6>' +formatTime(d.date) + '</h6>'  +
-            '2016 : ' + d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-            '2015 : ' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '<br/>'  +
-            GlobalAsset.words.gap[GlobalAsset.lang] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
+            '<table><tr><th>'+
+            '2016 </th><th class="number">' + d3.format(',')(d.turnstile_data[0].exits) + '</th></tr><tr><th>'  +
+            '2015 </th><th class="number">' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '</th></tr><tr><th>'  +
+            GlobalAsset.words.gap[GlobalAsset.lang] +'</th><th class="number">' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits)+'</th></tr></table>';
   }
 
   function drawTooltip() {
