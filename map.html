@@ -143,8 +143,8 @@
           }
         });
       }
-
-        Graph.prepareData(data.total.properties);
+        Graph.setData(data.total.properties);
+        Graph.prepareMaterials();
         Graph.createGraph();
       } else {
         // We reached our target server, but it returned an error\
@@ -224,7 +224,7 @@
     selectedLabel.style.bottom = (GlobalAsset.getSizeByProperty(selection.feature.properties)-21 + 30)+ 'px';
     scene.rebuild().then(function () {
       // graphDiv.innerHTML = '';
-      Graph.prepareData(selection.feature.properties);
+      Graph.setData(selection.feature.properties);
       Graph.updateGraph();
     });
   }
