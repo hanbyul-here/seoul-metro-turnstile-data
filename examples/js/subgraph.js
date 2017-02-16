@@ -46,7 +46,7 @@ var Graph = (function() {
   var ave, previousAve;
   var datesForX = [];
 
-  function prepareData(properties) {
+  function setData(properties) {
     mainDiv = d3.select('#graph-box');
 
     ave = 0;
@@ -85,8 +85,6 @@ var Graph = (function() {
     }
     previousAve /= reformedDataToCompare.length;
     previousAve = Math.floor(previousAve);
-
-    prepareMaterials();
   }
 
   function prepareMaterials() {
@@ -107,9 +105,10 @@ var Graph = (function() {
 
   var animationTime = 200;
   var rect2015, rect2016, text2015, text2016;
+  var barSvgWidth;
 
   function drawBarGraph() {
-    var barSvgWidth = 100;
+    barSvgWidth = 100;
 
     var barSvg = svgBox
               .append('svg')
@@ -201,7 +200,7 @@ var Graph = (function() {
           .text('2015');
 
     legendSvg.append('text')
-          .attr('x', barWidth - 80)
+          .attr('x', barSvgWidth - 80)
           .attr('y', mainDivHeight + 45)
           .text(GlobalAsset.words['ave'][GlobalAsset.lang]);
 
@@ -257,7 +256,7 @@ var Graph = (function() {
 
   var subValueline;
   var lineGraphSvg;
-  
+
   function drawLineGraph() {
 
     svgBox = mainDiv.append('div')
@@ -331,23 +330,20 @@ var Graph = (function() {
 
 
   var clickBehaviour = function (d, i) {
-    tooltipDiv.transition()
-        .duration(animationTime)
+    tooltipDiv
         .style('opacity', .9)
         .style('height', 'auto')
         .style('left', (d3.event.pageX) + 15 + 'px')
         .style('top', (d3.event.pageY - 28) + 'px')
         .html(getTooltipHTML(d, i));
   }
-  
+
   var mouseOverBehaviour = function (d, i) {
     clickBehaviour(d, i)
   }
 
   var mouseOutBehaviour = function () {
     tooltipDiv.html('')
-        .transition()
-        .duration(animationTime)
         .style('height', 0)
         .style('opacity', 0);
   }
@@ -440,7 +436,8 @@ var Graph = (function() {
   }
 
   return {
-    prepareData: prepareData,
+    setData: setData,
+    prepareMaterials: prepareMaterials,
     createGraph: createGraph,
     updateGraph: updateGraph,
     updateYAxis: updateYAxis,
