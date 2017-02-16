@@ -310,10 +310,12 @@ var Graph = (function() {
           .tickPadding(5)
           .tickSize(-mainDivHeight)
           .tickFormat(function(d, i) {
-            // if ( i%2 ==0) {
+            if(!isThisSmallScreen()) {
               return formatTime(d);
-            // }
-            // else return '';})
+            } else {
+              if ( i%2 ==0) return formatTime(d);
+              else return '';
+            }
           })
         )
         .selectAll('text')
@@ -430,6 +432,10 @@ var Graph = (function() {
                 .ticks(5));
   }
 
+
+  function isThisSmallScreen() {
+    return (window.innerWidth <= 768);
+  }
 
   function createGraph () {
     drawDOM();

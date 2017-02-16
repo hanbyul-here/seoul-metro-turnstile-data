@@ -30,17 +30,130 @@
     map.setView([37.5601,126.9794], 14.3);
 
     // add legend
-    var legend = L.control({position: 'bottomleft'});
-    var selectedDiv;
-    var loadingDiv;
-    var selectedLabel;
-    var selectedFeature;
-
-    var maxRad, minRad;
-    var first = true;
-    var maxP, minP;
 
     var formatNumber = d3.format(",");
+    var CustomLegend = L.Control.extend({
+      options: {
+        position: 'bottomleft'
+      },
+      initialize: function (data) {
+        this.data = data;
+      },
+
+      onAdd: function (map) {
+        this.div = L.DomUtil.create('div', 'info');
+        this.div.setAttribute('id','legend');
+
+        var graphDiv = L.DomUtil.create('div', '');
+        graphDiv.setAttribute('id','graph-box');
+
+        var circleDiv = L.DomUtil.create('div', 'circle-wrapper');
+        this.selectedDiv = L.DomUtil.create('div', 'circle selected');
+        this.selectedDiv.style.backgroundColor = 'gray';
+
+        var maximumDiv = L.DomUtil.create('div', 'circle maximum');
+        var minimumDiv = L.DomUtil.create('div', 'circle minimum');
+
+        this.maxRad = GlobalAsset.getSizeByProperty(this.data.max.properties);
+        this.minRad = GlobalAsset.getSizeByProperty(this.data.min.properties);
+
+        maximumDiv.style.width = this.maxRad +'px';
+        maximumDiv.style.height = this.maxRad+'px';
+        minimumDiv.style.width = this.minRad+'px';
+        minimumDiv.style.height = this.minRad+'px';
+        minimumDiv.style.left = (this.maxRad - this.minRad)/2 + 'px'
+
+        circleDiv.appendChild(maximumDiv);
+        circleDiv.appendChild(this.selectedDiv);
+        circleDiv.appendChild(minimumDiv);
+
+        var labelDiv = L.DomUtil.create('div', 'label-wrapper');
+
+        var maxLabel = L.DomUtil.create('div', 'max label');
+        var minLabel = L.DomUtil.create('div', 'min label');
+
+        this.selectedLabel = L.DomUtil.create('div', 'selected label');
+
+        maxLabel.style.left = this.maxRad/2+ 'px';
+        maxLabel.style.bottom = 30 + this.maxRad+ 'px';
+        minLabel.style.left = this.maxRad/2+ 'px';
+        minLabel.style.bottom = 30 + this.minRad-21+ 'px';
+        this.selectedLabel.style.width = '0';
+
+        this.maxP = this.data.max.properties;
+        var minP = this.data.min.properties;
+
+        maxLabel.innerHTML = GlobalAsset.words['max'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(this.maxP));
+        minLabel.innerHTML =  GlobalAsset.words['min'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(minP));
+        //selectedLabel.style.left = maxRad/2+ 'px';
+        labelDiv.appendChild(maxLabel);
+        labelDiv.appendChild(minLabel);
+        labelDiv.appendChild(this.selectedLabel);
+
+        circleDiv.appendChild(labelDiv);
+
+        this.loadingDiv = L.DomUtil.create('div', 'loading');
+
+        this.div.appendChild(circleDiv);
+        this.div.appendChild(graphDiv);
+        this.div.appendChild(this.loadingDiv);
+        return this.div;
+      },
+
+      shrink: function () {
+        this.loadingDiv.style.top = '35px';
+        this.isDetailsOpen = false;
+        var legendBox = this.getContainer();
+        legendBox.style.bottom = '-180px';
+        var openButton = L.DomUtil.create('button', 'open');
+        openButton.innerHTML = 'Open details';
+        legendBox.append(openButton);
+        openButton.addEventListener('click', function (e) {
+          if (this.isDetailsOpen) {
+            openButton.innerHTML = 'Open details';
+            legendBox.style.bottom = '-180px';
+            this.isDetailsOpen = false;
+          } else {
+            openButton.innerHTML = 'Close details';
+            legendBox.style.bottom = '15px';
+            this.isDetailsOpen = true;
+          }
+        });
+      },
+      showLoadingStatus: function () {
+        this.loadingDiv.style.visibility = 'visible';
+      },
+      hideLoadingStatus: function () {
+        console.log(this.loadingDiv);
+        this.loadingDiv.style.visibility = 'hidden';
+      },
+      updateWithSelectedFeature: function(scene, selection) {
+        this.showLoadingStatus();
+        var selectedFeature = selection.feature;
+        var loadingDiv = this.loadingDiv;
+        scene.config.global.selected_station = selection.feature.properties.station_name;
+        if (this.first) {
+          Graph.updateYAxis(GlobalAsset.getMax(this.maxP));
+          first = false;
+        }
+        this.selectedDiv.style.width = GlobalAsset.getSizeByProperty(selection.feature.properties) +'px';
+        this.selectedDiv.style.height = GlobalAsset.getSizeByProperty(selection.feature.properties) +'px';
+        this.selectedDiv.style.left = (this.maxRad -  GlobalAsset.getSizeByProperty(selection.feature.properties))/2+'px';
+        this.selectedLabel.style.width = '70%';
+        this.selectedLabel.style.left = (this.maxRad/2)+'px';
+        this.selectedLabel.innerHTML =  GlobalAsset.words['gap'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(selection.feature.properties));
+        this.selectedLabel.style.bottom = (GlobalAsset.getSizeByProperty(selection.feature.properties)-21 + 30)+ 'px';
+        scene.rebuild().then(function () {
+          // graphDiv.innerHTML = '';
+          Graph.setData(selection.feature.properties);
+          Graph.updateGraph();
+          loadingDiv.style.visibility = 'hidden';
+        });
+      }
+    });
+
+
+    var customLegend;
 
     var request = new XMLHttpRequest();
     request.open('GET', './data/total.json', true);
@@ -50,104 +163,11 @@
         // Success!
         var data = JSON.parse(this.response);
 
-        legend.onAdd = function (map) {
-
-        var div = L.DomUtil.create('div', 'info');
-        div.setAttribute('id','legend');
-
-        var graphDiv = L.DomUtil.create('div', '');
-        graphDiv.setAttribute('id','graph-box');
-
-        var circleDiv = L.DomUtil.create('div', 'circle-wrapper');
-
-        selectedDiv = L.DomUtil.create('div', 'circle selected');
-        var maximumDiv = L.DomUtil.create('div', 'circle maximum');
-        var minimumDiv = L.DomUtil.create('div', 'circle minimum');
-
-        loadingDiv = L.DomUtil.create('div', 'loading');
-
-        selectedDiv.style.backgroundColor = 'gray';
-        maxRad = GlobalAsset.getSizeByProperty(data.max.properties);//GlobalAsset.getSizeByProperty(78486);
-        minRad = GlobalAsset.getSizeByProperty(data.min.properties);//GlobalAsset.getSizeByProperty(891);
-
-        maximumDiv.style.width = maxRad +'px';
-        maximumDiv.style.height = maxRad+'px';
-        minimumDiv.style.width = minRad+'px';
-        minimumDiv.style.height = minRad+'px';
-        minimumDiv.style.left = (maxRad - minRad)/2 + 'px'
-
-        circleDiv.appendChild(maximumDiv);
-        circleDiv.appendChild(selectedDiv);
-        circleDiv.appendChild(minimumDiv);
-
-        var labelDiv = L.DomUtil.create('div', 'label-wrapper');
-
-        var maxLabel = L.DomUtil.create('div', 'max label');
-        var minLabel = L.DomUtil.create('div', 'min label');
-        selectedLabel = L.DomUtil.create('div', 'selected label');
-
-        maxLabel.style.left = maxRad/2+ 'px';
-        maxLabel.style.bottom = 30 + maxRad+ 'px';
-        minLabel.style.left = maxRad/2+ 'px';
-        minLabel.style.bottom = 30 + minRad-21+ 'px';
-        selectedLabel.style.width = '0';
-
-        maxP = data.max.properties;
-        minP = data.min.properties;
-
-        maxLabel.innerHTML = GlobalAsset.words['max'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(maxP));
-        minLabel.innerHTML =  GlobalAsset.words['min'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(minP));
-        //selectedLabel.style.left = maxRad/2+ 'px';
-
-
-        labelDiv.appendChild(maxLabel);
-        labelDiv.appendChild(minLabel);
-        labelDiv.appendChild(selectedLabel);
-
-        circleDiv.appendChild(labelDiv);
-
-        div.appendChild(circleDiv);
-        div.appendChild(graphDiv);
-        div.appendChild(loadingDiv);
-
-        div.addEventListener('mouseover', function () {
-          map.dragging.disable();
-        });
-
-        div.addEventListener('mouseout', function () {
-          map.dragging.enable();
-        });
-        div.addEventListener('touchstart', function () {
-          map.dragging.disable();
-        });
-        div.addEventListener('touchend', function () {
-          map.dragging.enable();
-        });
-
-        return div;
-      };
-
-      legend.addTo(map);
+        customLegend = new CustomLegend(data);
+        customLegend.addTo(map);
 
       if (isThisSmallScreen()) {
-        loadingDiv.style.top = '35px';
-        var isDetailsOpen = false;
-        var legendBox = legend.getContainer();
-        legendBox.style.bottom = '-180px';
-        var openButton = L.DomUtil.create('button', 'open');
-        openButton.innerHTML = 'Open details';
-        legendBox.append(openButton);
-        openButton.addEventListener('click', function (e) {
-          if (isDetailsOpen) {
-            openButton.innerHTML = 'Open details';
-            legendBox.style.bottom = '-180px';
-            isDetailsOpen = false;
-          } else {
-            openButton.innerHTML = 'Close details';
-            legendBox.style.bottom = '15px';
-            isDetailsOpen = true;
-          }
-        });
+        customLegend.shrink();
       }
         Graph.setData(data.total.properties);
         Graph.prepareMaterials();
@@ -167,17 +187,7 @@
       map: map
     })
 
-
     map.on('tangramloaded', function(e) {
-
-      var popup = document.createElement('div');
-      popup.setAttribute('id', 'popup');
-      map.getContainer().append(popup);
-
-      var graphDiv = document.createElement('div');
-      graphDiv.setAttribute('id','graph-box');
-      map.getContainer().append(graphDiv);
-
 
       var scene = e.tangramLayer.scene;
       if(scene.config.global.lang != GlobalAsset.lang) {
@@ -191,7 +201,7 @@
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
             if (selection.feature.source_name == 'stations') {
-              updateWithSelectedFeature(scene, selection);
+              customLegend.updateWithSelectedFeature(scene, selection);
             }
           }
         });
@@ -202,39 +212,15 @@
         scene.getFeatureAt(pixel).then(function(selection) {
           if(selection.feature) {
             if (selection.feature.source_name == 'stations') {
-              updateWithSelectedFeature(scene, selection);
+              customLegend.updateWithSelectedFeature(scene, selection);
             }
           }
         });
       });
     });
 
-
   function isThisSmallScreen() {
     return (window.innerWidth <= 768);
-  }
-
-  function updateWithSelectedFeature(scene, selection) {
-    loadingDiv.style.visibility = 'visible';
-    selectedFeature = selection.feature;
-    scene.config.global.selected_station = selection.feature.properties.station_name;
-    if (first) {
-      Graph.updateYAxis(GlobalAsset.getMax(maxP));
-      first = false;
-    }
-    selectedDiv.style.width = GlobalAsset.getSizeByProperty(selection.feature.properties) +'px';
-    selectedDiv.style.height = GlobalAsset.getSizeByProperty(selection.feature.properties) +'px';
-    selectedDiv.style.left = (maxRad -  GlobalAsset.getSizeByProperty(selection.feature.properties))/2+'px';
-    selectedLabel.style.width = '70%';
-    selectedLabel.style.left = (maxRad/2)+'px';
-    selectedLabel.innerHTML =  GlobalAsset.words['gap'][GlobalAsset.lang] + ' : ' + formatNumber(GlobalAsset.getAvereageIncrement(selection.feature.properties));
-    selectedLabel.style.bottom = (GlobalAsset.getSizeByProperty(selection.feature.properties)-21 + 30)+ 'px';
-    scene.rebuild().then(function () {
-      // graphDiv.innerHTML = '';
-      Graph.setData(selection.feature.properties);
-      Graph.updateGraph();
-      loadingDiv.style.visibility = 'hidden';
-    });
   }
 
   </script>

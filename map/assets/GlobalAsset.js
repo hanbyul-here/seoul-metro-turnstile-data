@@ -3,7 +3,7 @@ var GlobalAsset = {
   words: {
     totalTitle: {
       kr: '매주 토요일 12개 역의 승객수 변화',
-      en: '`Total Saturday ridership of 12 stops`'
+      en: 'Total Saturday ridership of 12 stops'
     },
     total: {
       kr: '총합',
