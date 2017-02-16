@@ -159,7 +159,7 @@ html, body {
   stroke-width: 0.5px;
 }
 .tick foreignObject {
-  transform: translate(-20px,0);
+  transform: translate(-20px, 2px);
   line-height: 1.1;
   text-align: center;
 }
