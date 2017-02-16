@@ -21,6 +21,10 @@ var GlobalAsset = {
       kr:'평균',
       en:'average'
     },
+    saturday: {
+      kr: '토요일',
+      en: 'Sat'
+    },
     year: {
       kr: '년',
       en: ''

@@ -145,6 +145,10 @@ html, body {
   stroke: gray;
   stroke-width: 0.5px;
 }
+.tick div {
+  margin-left: -15px;
+  text-align: center;
+}
 .info {
   background-color: #fff;
   padding: 3px;
