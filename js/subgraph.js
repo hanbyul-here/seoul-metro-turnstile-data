@@ -1,15 +1,4 @@
 var Graph = (function() {
-
-  var station_name;
-  var transfer_line;
-  var data;
-  var dataToCompare;
-  var reformedDataToCompare;
-  var ave;
-  var datesForX = [];
-  var previousAve;
-
-
   var formatTime = function(time) {
     if (GlobalAsset.lang == 'en') {
       var dayTime = d3.timeFormat('%b %d')(time);
@@ -27,13 +16,14 @@ var Graph = (function() {
   };
   var formatNumber = d3.format(",");
   var minMaxFormat = d3.format(".3r");
-  var subDiv;
-  var subDivWidth;
-  var subHeight;
+
+  var mainDiv;
+  var mainDivWidth;
+  var mainDivHeight;
+  var margin = { top: 10, right: 20, bottom: 10, left: 47};
+
   var svgBox;
-  var subSvg;
   var subX, subY;
-  var subValueline
 
   var tooltipDiv = d3.select('body').append('div')
     .attr('class', 'tooltip')
@@ -48,22 +38,30 @@ var Graph = (function() {
     return date;
   }
 
+
+  // Data to display
+  var data;
+  var stationName, transferLine;
+  var reformedDataToCompare;
+  var ave, previousAve;
+  var datesForX = [];
+
   function prepareData(properties) {
-    subDiv = d3.select('#graph-box');
+    mainDiv = d3.select('#graph-box');
 
     ave = 0;
     previousAve = 0;
 
     reformedDataToCompare = [];
 
-    if (GlobalAsset.lang =='en') station_name = properties.station_name_en || GlobalAsset.words['totalTitle'][GlobalAsset.lang];
-    else station_name = properties.station_name || GlobalAsset.words['totalTitle'][GlobalAsset.lang];
+    if (GlobalAsset.lang =='en') stationName = properties.station_name_en || GlobalAsset.words['totalTitle'][GlobalAsset.lang];
+    else stationName = properties.station_name || GlobalAsset.words['totalTitle'][GlobalAsset.lang];
 
-    transfer_line = properties.transfer_line;
-    if (transfer_line) transfer_line.unshift(properties.line_num)
+    transferLine = properties.transfer_line;
+    if (transferLine) transferLine.unshift(properties.line_num)
 
     data = properties.dates;
-    dataToCompare = properties.previous_data;
+    var dataToCompare = properties.previous_data;
     data.reverse();
     data.forEach(function(d) {
       datesForX.push(getDateString(d.date));
@@ -87,49 +85,83 @@ var Graph = (function() {
     }
     previousAve /= reformedDataToCompare.length;
     previousAve = Math.floor(previousAve);
+
+    prepareMaterials();
   }
 
-  var margin = { top: 10, right: 20, bottom: 10, left: 47};
-  var barSvg;
-  var barWidth;
-  var barHeight;
+  function prepareMaterials() {
+
+    mainDivWidth = document.getElementById('graph-box').clientWidth - margin.left - margin.right - 100;
+    mainDivHeight = 120 - margin.top - margin.bottom;
+
+
+    //var subMin = minMaxFormat(Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits })));
+    var max = minMaxFormat(Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits})));
+    subX = d3.scaleTime().rangeRound([0, mainDivWidth]);
+    subY = d3.scaleLinear().rangeRound([mainDivHeight, 0]);
+
+    subX.domain([data[0].date, data[data.length-1].date]);
+    subY.domain([0, max*1.05]);
+
+  }
+
+  var animationTime = 200;
+  var rect2015, rect2016, text2015, text2016;
 
   function drawBarGraph() {
-    barWidth = 100;
-    barHeight =  subHeight;
+    var barSvgWidth = 100;
 
-    barSvg = svgBox
+    var barSvg = svgBox
               .append('svg')
-              .attr('width', barWidth)
-              .attr('height', barHeight)
+              .attr('width', barSvgWidth)
+              .attr('height', mainDivHeight)
 
     var barG = barSvg.append('g')
           .attr('class', 'bar-graph');
 
-    barG.append('rect')
+    rect2015 = barG.append('rect')
           .attr('fill', 'rgba(255, 204, 0, 0.7)')
           .attr('width', 30)
-          .attr('height', barHeight-subY(previousAve))
+          .attr('height', mainDivHeight-subY(previousAve))
           .attr('transform', 'translate(10,'+ subY(previousAve)+')');
 
-    barG.append('text')
+    text2015 = barG.append('text')
           .attr('x', 25 - getBarGraphLabelXPos(previousAve))
           .attr('y', subY(previousAve) - 1)
           .text(formatNumber(previousAve))
 
 
-    barG.append('rect')
+    rect2016 = barG.append('rect')
           .attr('fill', GlobalAsset.subMainColor)
           .attr('width', 30)
-          .attr('height', barHeight-subY(ave))
+          .attr('height', mainDivHeight-subY(ave))
           .attr('transform', 'translate(50,'+ subY(ave) +')');
 
-    barG.append('text')
+    text2016 = barG.append('text')
           .attr('x', 65 - getBarGraphLabelXPos(ave))
           .attr('y', subY(ave) - 1)
           .text(formatNumber(ave))
 
   }
+
+  function updateBarGraph() {
+
+    rect2015.attr('height', mainDivHeight-subY(previousAve))
+            .attr('transform', 'translate(10,'+ subY(previousAve)+')');
+
+    text2015.attr('x', 25 - getBarGraphLabelXPos(ave))
+          .attr('y', subY(previousAve) - 1)
+          .text(formatNumber(previousAve))
+
+
+    rect2016.attr('height', mainDivHeight-subY(ave))
+            .attr('transform', 'translate(50,'+ subY(ave) +')');
+
+    text2016.attr('x', 65 - getBarGraphLabelXPos(ave))
+          .attr('y', subY(ave) - 1)
+          .text(formatNumber(ave))
+  }
+
 
   function getBarGraphLabelXPos(number) {
     var digits = (number+'').length;
@@ -139,8 +171,9 @@ var Graph = (function() {
   }
 
   function drawLegend() {
-    var legendSvg = subDiv.append('svg')
-                    .attr('style','position:absolute;right:0;width:'+barWidth+'px');
+    var barSvgWidth = 100;
+    var legendSvg = mainDiv.append('svg')
+                    .attr('style','position:absolute;right:0;width:'+barSvgWidth+'px');
 
     legendSvg.append('rect')
           .attr('fill', GlobalAsset.subMainColor)
@@ -169,23 +202,26 @@ var Graph = (function() {
 
     legendSvg.append('text')
           .attr('x', barWidth - 80)
-          .attr('y', barHeight + 45)
+          .attr('y', mainDivHeight + 45)
           .text(GlobalAsset.words['ave'][GlobalAsset.lang]);
 
   }
 
+
+
+
   function drawDOM() {
-    var infoBox = subDiv.append('div')
+    infoBox = mainDiv.append('div')
           .attr('id','info-box');
 
     infoBox.append('h4')
-          .text(station_name);
+          .text(stationName);
 
 
-    if (transfer_line) {
+    if (transferLine) {
       var lineData = infoBox
             .selectAll('div')
-            .data(transfer_line);
+            .data(transferLine);
 
 
       lineData.enter().append('h6')
@@ -197,143 +233,18 @@ var Graph = (function() {
     }
   }
 
-  function drawLineGraph() {
-
-    svgBox = subDiv.append('div')
-        .attr('id','svg-box');
-
-
-    subDivWidth = document.getElementById('graph-box').clientWidth - margin.left - margin.right - 100;
-    subHeight = 120 - margin.top - margin.bottom;
-
-    subSvg = svgBox
-                  .append('svg')
-                  .attr('width', subDivWidth + margin.left +margin.right)
-                  .attr('height', subHeight + margin.top + margin.bottom)
-                  .append('g')
-                  .attr('transform',
-                        'translate(' + margin.left + ',0)');
-
-    subX = d3.scaleTime().rangeRound([0, subDivWidth]);
-    subY = d3.scaleLinear().rangeRound([subHeight, 0]);
-
-    // mouse interaction
-
-    // define the line
-    subValueline = d3.line()
-        .x(function(d) { return subX(d.date); })
-        .y(function(d) { return subY(d.turnstile_data[0].exits); });
-
-    //var subMin = minMaxFormat(Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits })));
-    var subMax = minMaxFormat(Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits})));
-
-    subX.domain([data[0].date, data[data.length-1].date]);
-    subY.domain([0, subMax*1.05]);
-
-      // Add the valueline path
-    subSvg.append('path')
-        .data([data])
-        .attr('class', 'line')
-        .attr('d', subValueline);
-
-
-    subSvg.append('path')
-        .data([reformedDataToCompare])
-        .attr('class', 'lineToCompare')
-        .attr('d', subValueline);
-
-    subSvg.append('g')
-        .attr('transform', 'translate(0,' + subHeight + ')')
-        .attr('class','ticktick')
-        .call(
-          d3.axisBottom(subX)
-          .tickValues(datesForX)
-          .tickPadding(5)
-          .tickSize(-subHeight)
-          .tickFormat(function(d, i) {
-            if ( i%2 ==0) {
-              return formatTime(d);
-            }
-            else return '';}))
-
-    subSvg.append('g')
-        .attr('class', 'yaxis')
-        .call(d3.axisLeft(subY)
-                .tickSize(-subDivWidth)
-                .tickPadding([0])
-                .ticks(5));
-
-    // Add Scatter plot points and tooltip
-    subSvg.selectAll('circle')
-      .data(data)
-      .enter()
-      .append('circle')
-      .attr('class', 'circledot')
-      .attr('r', 6)
-      .attr('fill', GlobalAsset.subMainColor)
-      .attr('cx', function(d, i) {
-        return subX(d.date)})
-      .attr('cy', function(d, i) {
-        return subY(d.turnstile_data[0].exits)})
-    .on('click',function(d, i) {
-      tooltipDiv.transition()
-          .duration(200)
-          .style('opacity', .9);
-      tooltipDiv.html(getTooltipHTML(d, i))
-          .style('height', 'auto')
-          .style('left', (d3.event.pageX) + 15 + 'px')
-          .style('top', (d3.event.pageY - 28) + 'px');
-
-    var val = d3.line()
-        .x(function(d) { return subX(d.date); })
-        .y(function(d) { return subY(d.turnstile_data[0].exits); });
-
-    var zeroVal = d3.line()
-        .x(function(d) { return subX(d.date); })
-        .y(function(d) { return 0});
-
-      subSvg.append('path')
-          .attr('class', 'tooltip-line')
-          .attr('d', [val, zeroVal]);
-
-    })
-    .on('mouseover', function(d, i) {
-      tooltipDiv.transition()
-          .duration(200)
-          .style('opacity', .9);
-      tooltipDiv.html(getTooltipHTML(d, i))
-                .style('height', 'auto')
-                .style('left', (d3.event.pageX) + 15 + 'px')
-                .style('top', (d3.event.pageY - 28) + 'px');
-
-    })
-    .on('mouseout', function(d) {
-        tooltipDiv.transition()
-            .duration(500)
-            .style('height', 0)
-            .style('opacity', 0);
-    });
-  }
-
-  function getTooltipHTML(d, i) {
-    return '<h6>' +formatTime(d.date) + '</h6>'  +
-            '2016 : ' + d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
-            '2015 : ' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '<br/>'  +
-            GlobalAsset.words.gap[GlobalAsset.lang] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
-  }
-
 
   function updateDOM() {
-    var infoBox = subDiv.select('#info-box');
+    var infoBox = mainDiv.select('#info-box');
 
     infoBox.select('h4')
-        .text(station_name);
+        .text(stationName);
 
     infoBox.selectAll('h6').remove();
 
     var lineData = infoBox
           .selectAll('div')
-          .data(transfer_line);
+          .data(transferLine);
 
 
     lineData.enter().append('h6')
@@ -344,23 +255,113 @@ var Graph = (function() {
           })
   }
 
-  function updateYAxis(max) {
-    //var subMin = Math.min(d3.min(data, function(d) { return d.turnstile_data[0].exits; }), d3.min(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits }));
-    //var subMax = Math.max(d3.max(data, function(d) { return d.turnstile_data[0].exits; }), d3.max(reformedDataToCompare, function(d) { return d.turnstile_data[0].exits}));
-    // var middle = (subMin + subMax)/2;
+  var subValueline;
+  var lineGraphSvg;
+  
+  function drawLineGraph() {
 
-    subY.domain([0, max*1.05]);
-    subDiv.select('.yaxis')
-          .transition().duration(200)
-          .call(d3.axisLeft(subY)
-                .tickSize(-subDivWidth)
+    svgBox = mainDiv.append('div')
+        .attr('id','svg-box');
+
+    lineGraphSvg = svgBox
+              .append('svg')
+              .attr('width', mainDivWidth + margin.left +margin.right)
+              .attr('height', mainDivHeight + margin.top + margin.bottom)
+              .append('g')
+              .attr('transform',
+                    'translate(' + margin.left + ',0)');
+
+    // mouse interaction
+
+    // define the line
+    subValueline = d3.line()
+        .x(function(d) { return subX(d.date); })
+        .y(function(d) { return subY(d.turnstile_data[0].exits); });
+
+      // Add the valueline path
+    lineGraphSvg.append('path')
+        .data([data])
+        .attr('class', 'line')
+        .attr('d', subValueline);
+
+
+    lineGraphSvg.append('path')
+        .data([reformedDataToCompare])
+        .attr('class', 'lineToCompare')
+        .attr('d', subValueline);
+
+    lineGraphSvg.append('g')
+        .attr('transform', 'translate(0,' + mainDivHeight + ')')
+        .attr('class','ticktick')
+        .call(
+          d3.axisBottom(subX)
+          .tickValues(datesForX)
+          .tickPadding(5)
+          .tickSize(-mainDivHeight)
+          .tickFormat(function(d, i) {
+            if ( i%2 ==0) {
+              return formatTime(d);
+            }
+            else return '';}))
+
+    lineGraphSvg.append('g')
+        .attr('class', 'yaxis')
+        .call(d3.axisLeft(subY)
+                .tickSize(-mainDivWidth)
+                .tickPadding([0])
                 .ticks(5));
+
   }
 
-  function updateTipDots() {
-    subSvg.selectAll('circle').remove();
 
-    subSvg.selectAll('circle')
+  function updateLineGraph() {
+    d3.select('.line').remove();
+    d3.select('.lineToCompare').remove();
+
+    lineGraphSvg.append('path')
+        .data([data])
+        .attr('class', 'line')
+        .attr('d', subValueline);
+
+    lineGraphSvg.append('path')
+        .data([reformedDataToCompare])
+        .attr('class', 'lineToCompare')
+        .attr('d', subValueline);
+  }
+
+
+  var clickBehaviour = function (d, i) {
+    tooltipDiv.transition()
+        .duration(animationTime)
+        .style('opacity', .9)
+        .style('height', 'auto')
+        .style('left', (d3.event.pageX) + 15 + 'px')
+        .style('top', (d3.event.pageY - 28) + 'px')
+        .html(getTooltipHTML(d, i));
+  }
+  
+  var mouseOverBehaviour = function (d, i) {
+    clickBehaviour(d, i)
+  }
+
+  var mouseOutBehaviour = function () {
+    tooltipDiv.html('')
+        .transition()
+        .duration(animationTime)
+        .style('height', 0)
+        .style('opacity', 0);
+  }
+
+  function getTooltipHTML(d, i) {
+    return '<h6>' +formatTime(d.date) + '</h6>'  +
+            '2016 : ' + d3.format(',')(d.turnstile_data[0].exits) + '<br/>'  +
+            '2015 : ' + d3.format(',')(reformedDataToCompare[i].turnstile_data[0].exits) + '<br/>'  +
+            GlobalAsset.words.gap[GlobalAsset.lang] +' : ' + d3.format(',')(d.turnstile_data[0].exits- reformedDataToCompare[i].turnstile_data[0].exits);
+  }
+
+  function drawTooltip() {
+    // Add Scatter plot points and tooltip
+    lineGraphSvg.selectAll('circle')
       .data(data)
       .enter()
       .append('circle')
@@ -372,87 +373,64 @@ var Graph = (function() {
       .attr('cy', function(d, i) {
         return subY(d.turnstile_data[0].exits)})
     .on('click',function(d, i) {
-      tooltipDiv.transition()
-          .duration(200)
-          .style('height', 'auto')
-          .style('opacity', .9);
-      tooltipDiv.html(getTooltipHTML(d, i))
-      .style('left', (d3.event.pageX) + 10 + 'px')
-      .style('top', (d3.event.pageY - 28) + 'px');
+      clickBehaviour(d, i);
+
     })
     .on('mouseover', function(d, i) {
-      tooltipDiv.transition()
-          .duration(200)
-          .style('height', 'auto')
-          .style('opacity', .9);
-      tooltipDiv .html(getTooltipHTML(d, i))
-      .style('left', (d3.event.pageX) + 10 +'px')
-      .style('top', (d3.event.pageY - 28) + 'px');
+        mouseOverBehaviour(d, i);
     })
-    .on('mouseout', function(d) {
-        tooltipDiv.transition()
-            .duration(500)
-            .style('height', 0)
-            .style('opacity', 0);
-    });
+    .on('mouseout', mouseOutBehaviour);
   }
 
-  function updateLineGraph() {
-    d3.select('.line').remove();
-    d3.select('.lineToCompare').remove();
 
-    subSvg.append('path')
-        .data([data])
-        .attr('class', 'line')
-        .attr('d', subValueline);
+  function updateTooltip() {
+    lineGraphSvg.selectAll('circle').remove();
+    lineGraphSvg
+      .selectAll('circle')
+      .data(data)
+      .enter()
+      .append('circle')
+      .attr('class', 'circledot')
+      .attr('r', 6)
+      .attr('fill', GlobalAsset.subMainColor)
+      .attr('cx', function(d, i) {
+        return subX(d.date)})
+      .attr('cy', function(d, i) {
+        return subY(d.turnstile_data[0].exits)})
+    .on('click',function(d, i) {
+      clickBehaviour(d, i);
 
-    subSvg.append('path')
-        .data([reformedDataToCompare])
-        .attr('class', 'lineToCompare')
-        .attr('d', subValueline);
+    })
+    .on('mouseover', function(d, i) {
+        mouseOverBehaviour(d, i);
+    })
+    .on('mouseout', mouseOutBehaviour);
   }
 
-  function updateBarGraph() {
-    barSvg.select('.bar-graph').remove();
 
-    var barG = barSvg.append('g')
-          .attr('class', 'bar-graph')
-
-    barG.append('rect')
-          .attr('fill', 'rgba(255, 204, 0, 0.7)')
-          .attr('width', 30)
-          .attr('height', barHeight-subY(previousAve))
-          .attr('transform', 'translate(10,'+ subY(previousAve)+')');
-
-    barG.append('text')
-          .attr('x', 25 - getBarGraphLabelXPos(ave))
-          .attr('y', subY(previousAve) - 1)
-          .text(formatNumber(previousAve))
-
-
-    barG.append('rect')
-          .attr('fill', GlobalAsset.subMainColor)
-          .attr('width', 30)
-          .attr('height', barHeight-subY(ave))
-          .attr('transform', 'translate(50,'+ subY(ave) +')');
-
-    barG.append('text')
-          .attr('x', 65 - getBarGraphLabelXPos(ave))
-          .attr('y', subY(ave) - 1)
-          .text(formatNumber(ave))
+  function updateYAxis(max) {
+    subY.domain([0, max*1.05]);
+    mainDiv.select('.yaxis')
+          .transition().duration(200)
+          .call(d3.axisLeft(subY)
+                .tickSize(-mainDivWidth)
+                .ticks(5));
   }
+
 
   function createGraph () {
     drawDOM();
     drawLineGraph();
+    drawTooltip();
     drawBarGraph();
     drawLegend();
   }
+
   function updateGraph () {
-    updateLineGraph();
-    updateBarGraph();
-    updateTipDots();
     updateDOM();
+    updateLineGraph();
+    updateTooltip();
+    updateBarGraph();
   }
 
   function destroy () {
