@@ -295,7 +295,7 @@ var Graph = (function() {
 
   }
 
-  var xAxisBound = {height: 20, width: 25};
+  var xAxisBound = {height: 20, width: 40};
 
   function drawAxis () {
 

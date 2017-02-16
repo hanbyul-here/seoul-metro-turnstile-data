@@ -145,9 +145,8 @@ html, body {
   stroke: gray;
   stroke-width: 0.5px;
 }
-.tick div {
-  margin-left: -15px;
-  text-align: center;
+.tick foreignObject {
+  transform: translate(-20px,0);
 }
 .info {
   background-color: #fff;
