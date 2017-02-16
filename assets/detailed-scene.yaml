@@ -26,7 +26,21 @@ sources:
 
 layers:
   transit:
-    data: { source: mapzen, layer: transit }
+    transit-overlay-rail-lines:
+      has-data-color:
+        train-with-color:
+          filter: { kind: train }
+          draw:
+            lines:
+              color: |
+                  function(){
+                      var colour = feature.colour;
+                      if (colour.charAt(0) != '#'){
+                          colour = '#' + colour ;
+                          }
+                      return colour;
+                      }
+              order: 514
     lables-transit-lines:
       draw:
         icons:

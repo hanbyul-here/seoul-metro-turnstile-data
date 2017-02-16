@@ -1,7 +1,8 @@
 import:
-  - https://mapzen.com/carto/refill-style/refill-style.zip
+  - https://mapzen.com/carto/refill-style/6/refill-style.yaml
 global:
   sdk_transit_overlay: true
+  sdk_road_shields: false
 
 textures:
   custom-pois:
@@ -31,7 +32,22 @@ sources:
 layers:
   # Disabling shield for subway line
   transit:
-    data: { source: mapzen, layer: transit }
+    transit-overlay-rail-lines:
+      has-data-color:
+        train-with-color:
+          filter: { kind: train }
+          draw:
+            lines:
+              color: |
+                  function(){
+                      var colour = feature.colour;
+                      if (colour.charAt(0) != '#'){
+                          colour = '#' + colour ;
+                          }
+                      return colour;
+                      }
+              order: 514
+    # data: { source: mapzen, layer: transit }
     lables-transit-lines:
       draw:
         icons:
@@ -41,7 +57,7 @@ layers:
     data: { source: isochrone}
     draw:
       alpha_polygons:
-        order: 2999
+        order: 500
         color: |
           function() {
               if (feature.contour == 15) return '#50bf40';
@@ -56,5 +72,5 @@ layers:
       custom-icon:
         collide: true
         sprite: custom-train
-        size: [15px, 15px]
+        size: [[13, 10px],[14,14px],[15, 20px]]
         centroid: true
