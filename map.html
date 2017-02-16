@@ -128,14 +128,14 @@
       if (isThisSmallScreen()) {
         var isDetailsOpen = false;
         var legendBox = legend.getContainer();
-        legendBox.style.bottom = '-165px';
+        legendBox.style.bottom = '-180px';
         var openButton = L.DomUtil.create('button', 'open');
         openButton.innerHTML = 'Open details';
         legendBox.append(openButton);
         openButton.addEventListener('click', function (e) {
           if (isDetailsOpen) {
             openButton.innerHTML = 'Open details';
-            legendBox.style.bottom = '-165px';
+            legendBox.style.bottom = '-180px';
             isDetailsOpen = false;
           } else {
             openButton.innerHTML = 'Close details';
