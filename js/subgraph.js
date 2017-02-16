@@ -5,13 +5,18 @@ var Graph = (function() {
       var month = dayTime.split(' ')[0];
       var day = dayTime.split(' ')[1];
       var week = Math.ceil(day /7);
-      return GlobalAsset.words['week'][GlobalAsset.lang] + week + ' of ' +  month + GlobalAsset.words['month'][GlobalAsset.lang];
+      var suffix = 'th';
+      if (week == 1) suffix = 'st';
+      else if (week == 2) suffix = 'nd';
+      else if (week == 3) suffix = 'rd';
+      return  week + suffix + ' ' + GlobalAsset.words['saturday'][GlobalAsset.lang] + ' of ' +  month + GlobalAsset.words['month'][GlobalAsset.lang];
     } else {
       var dayTime = d3.timeFormat('%m %d')(time);
       var month = dayTime.split(' ')[0];
       var day = dayTime.split(' ')[1];
+      var suffix = '번째'
       var week = Math.ceil(day /7);
-      return month + GlobalAsset.words['month'][GlobalAsset.lang] + ' ' + week + GlobalAsset.words['week'][GlobalAsset.lang] ;
+      return  month + GlobalAsset.words['month'][GlobalAsset.lang] + ' '+week + suffix + ' ' + GlobalAsset.words['saturday'][GlobalAsset.lang];
     }
   };
   var formatNumber = d3.format(",");
@@ -37,7 +42,6 @@ var Graph = (function() {
     var date = parseTime(ds);
     return date;
   }
-
 
   // Data to display
   var data;
@@ -265,7 +269,7 @@ var Graph = (function() {
     lineGraphSvg = svgBox
               .append('svg')
               .attr('width', mainDivWidth + margin.left +margin.right)
-              .attr('height', mainDivHeight + margin.top + margin.bottom)
+              .attr('height', mainDivHeight + margin.top + margin.bottom + xAxisBound.height)
               .append('g')
               .attr('transform',
                     'translate(' + margin.left + ',0)');
@@ -289,9 +293,17 @@ var Graph = (function() {
         .attr('class', 'lineToCompare')
         .attr('d', subValueline);
 
+  }
+
+  var xAxisBound = {height: 20, width: 25};
+
+  function drawAxis () {
+
+    var wrap = d3.textwrap().bounds(xAxisBound);
+
     lineGraphSvg.append('g')
-        .attr('transform', 'translate(0,' + mainDivHeight + ')')
         .attr('class','ticktick')
+        .attr('transform', 'translate(0,' + mainDivHeight + ')')
         .call(
           d3.axisBottom(subX)
           .tickValues(datesForX)
@@ -301,7 +313,10 @@ var Graph = (function() {
             if ( i%2 ==0) {
               return formatTime(d);
             }
-            else return '';}))
+            else return '';})
+          )
+        .selectAll('text')
+        .call(wrap);
 
     lineGraphSvg.append('g')
         .attr('class', 'yaxis')
@@ -309,7 +324,6 @@ var Graph = (function() {
                 .tickSize(-mainDivWidth)
                 .tickPadding([0])
                 .ticks(5));
-
   }
 
 
@@ -405,6 +419,7 @@ var Graph = (function() {
 
 
   function updateYAxis(max) {
+    // YAxis updates only one time
     subY.domain([0, max*1.05]);
     mainDiv.select('.yaxis')
           .transition().duration(200)
@@ -417,6 +432,7 @@ var Graph = (function() {
   function createGraph () {
     drawDOM();
     drawLineGraph();
+    drawAxis();
     drawTooltip();
     drawBarGraph();
     drawLegend();
