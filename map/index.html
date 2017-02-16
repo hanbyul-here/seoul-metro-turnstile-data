@@ -32,6 +32,7 @@
     // add legend
     var legend = L.control({position: 'bottomleft'});
     var selectedDiv;
+    var loadingDiv;
     var selectedLabel;
     var selectedFeature;
 
@@ -42,7 +43,7 @@
     var formatNumber = d3.format(",");
 
     var request = new XMLHttpRequest();
-    request.open('GET', './assets/total.json', true);
+    request.open('GET', './data/total.json', true);
 
     request.onload = function() {
       if (this.status >= 200 && this.status < 400) {
@@ -62,6 +63,8 @@
         selectedDiv = L.DomUtil.create('div', 'circle selected');
         var maximumDiv = L.DomUtil.create('div', 'circle maximum');
         var minimumDiv = L.DomUtil.create('div', 'circle minimum');
+
+        loadingDiv = L.DomUtil.create('div', 'loading');
 
         selectedDiv.style.backgroundColor = 'gray';
         maxRad = GlobalAsset.getSizeByProperty(data.max.properties);//GlobalAsset.getSizeByProperty(78486);
@@ -105,6 +108,7 @@
 
         div.appendChild(circleDiv);
         div.appendChild(graphDiv);
+        div.appendChild(loadingDiv);
 
         div.addEventListener('mouseover', function () {
           map.dragging.disable();
@@ -126,6 +130,7 @@
       legend.addTo(map);
 
       if (isThisSmallScreen()) {
+        loadingDiv.style.top = '35px';
         var isDetailsOpen = false;
         var legendBox = legend.getContainer();
         legendBox.style.bottom = '-180px';
@@ -210,6 +215,7 @@
   }
 
   function updateWithSelectedFeature(scene, selection) {
+    loadingDiv.style.visibility = 'visible';
     selectedFeature = selection.feature;
     scene.config.global.selected_station = selection.feature.properties.station_name;
     if (first) {
@@ -227,6 +233,7 @@
       // graphDiv.innerHTML = '';
       Graph.setData(selection.feature.properties);
       Graph.updateGraph();
+      loadingDiv.style.visibility = 'hidden';
     });
   }
 
