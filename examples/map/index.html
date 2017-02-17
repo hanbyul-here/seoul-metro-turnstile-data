@@ -132,9 +132,10 @@
         var selectedFeature = selection.feature;
         var loadingDiv = this.loadingDiv;
         scene.config.global.selected_station = selection.feature.properties.station_name;
+        this.first = true;
         if (this.first) {
           Graph.updateYAxis(GlobalAsset.getMax(this.maxP));
-          first = false;
+          this.first = false;
         }
         this.selectedDiv.style.width = GlobalAsset.getSizeByProperty(selection.feature.properties) +'px';
         this.selectedDiv.style.height = GlobalAsset.getSizeByProperty(selection.feature.properties) +'px';
