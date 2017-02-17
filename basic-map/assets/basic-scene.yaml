@@ -67,6 +67,7 @@ layers:
            }
   stations:
     data: { source: all-stations}
+    filter: { $zoom: { min: 13 }}
     draw:
       order: 3100
       custom-icon:
