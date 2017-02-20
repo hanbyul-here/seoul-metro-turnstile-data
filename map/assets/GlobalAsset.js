@@ -1,3 +1,4 @@
+// Everything which should be shared between yaml and script is here 
 var GlobalAsset = {
   lang: 'en',
   words: {
