@@ -21,7 +21,7 @@
 
     L.Mapzen.apiKey = 'matrix-5kvnWuh';
     var map = L.Mapzen.map('map-30min', {
-      attribution: '<a href="https://github.com/hanbyul-here/seoul-metro-turnstile-data">GitHub Repo</a>' + ' | ' + '<a href="http://data.seoul.go.kr/">서울 열린 데이터 광장</a>' + ' | ' + '© <a href="https://www.mapzen.com/rights">Mapzen</a>,  <a href="https://openstreetmap.org/copyright">OSM</a>, and <a href="https://www.mapzen.com/rights/#services-and-data-sources">others</a>' ,
+      attribution: '<a href="https://github.com/hanbyul-here/seoul-metro-turnstile-data">Read more about this map</a>' + ' | ' + '<a href="http://data.seoul.go.kr/">서울 열린 데이터 광장</a>' + ' | ' + '© <a href="https://www.mapzen.com/rights">Mapzen</a>,  <a href="https://openstreetmap.org/copyright">OSM</a>, and <a href="https://www.mapzen.com/rights/#services-and-data-sources">others</a>' ,
       tangramOptions: {
         scene: 'assets/detailed-scene.yaml'
       },
@@ -98,9 +98,14 @@
 
         this.loadingDiv = L.DomUtil.create('div', 'loading');
 
+
         this.div.appendChild(circleDiv);
         this.div.appendChild(graphDiv);
         this.div.appendChild(this.loadingDiv);
+
+         // Stop map events while users interacting with search
+        this.div.onmousedown = this.div.ondblclick = this.div.onmousemove = L.DomEvent.stopPropagation;
+
         return this.div;
       },
 
