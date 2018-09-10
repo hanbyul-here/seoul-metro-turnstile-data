@@ -1,11 +1,12 @@
 import:
-  - https://mapzen.com/carto/refill-style-no-labels/refill-style-no-labels.yaml
-
+  - https://www.nextzen.org/carto/refill-style/refill-style.zip
+  
 global:
   # Turn on subway line
   sdk_transit_overlay: true
   selected_station: null
   lang: 'en'
+  sdk_api_key: LPQj2bjVTWCUKRg3D9urLA
 
 styles:
   # Give some transparency to 
